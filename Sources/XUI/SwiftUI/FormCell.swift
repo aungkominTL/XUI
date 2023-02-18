@@ -10,13 +10,9 @@ import SwiftUI
 
 public struct FormCell<Left: View, Right: View>: View {
     
-    @ViewBuilder var left: () -> Left
-    @ViewBuilder var right: () -> Right
+    public var left: () -> Left
+    public var right: () -> Right
 
-    init(left: @escaping () -> View, right: @escaping () -> View) {
-        self.left = left
-        self.right = right
-    }
     public var body: some View {
         HStack {
             left()
