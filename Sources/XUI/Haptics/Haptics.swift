@@ -7,14 +7,14 @@
 
 import UIKit
 
-public class Haptics {
+public class _Haptics {
 
-    public static var shared: Haptics {
+    public static var shared: _Haptics {
         get { _shared }
         set { _shared = newValue }
     }
     @AtomicQueue
-    private static var _shared = Haptics()
+    private static var _shared = _Haptics()
 
     private init() { }
 

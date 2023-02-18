@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 16.0, *)
-public struct XFormRow<Content: View>: View {
+public struct _FormRow<Content: View>: View {
 
     private let title: String
     private let isEmpty: Bool

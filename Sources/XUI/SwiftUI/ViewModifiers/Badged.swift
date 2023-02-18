@@ -7,12 +7,10 @@
 
 import SwiftUI
 @available(iOS 16.0.0, *)
-public struct XBadgedModifier: ViewModifier {
+
+private struct XBadgedModifier: ViewModifier {
     let string: String
-    public init(string: String) {
-        self.string = string
-    }
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         HStack(alignment: .bottom, spacing: 4) {
             content
             Text(string)
@@ -24,7 +22,7 @@ public struct XBadgedModifier: ViewModifier {
 }
 @available(iOS 16.0, *)
 public extension View {
-    func xBadged(_ string: String) -> some View {
+    func _badged(_ string: String) -> some View {
         ModifiedContent(content: self, modifier: XBadgedModifier(string: string))
     }
 }

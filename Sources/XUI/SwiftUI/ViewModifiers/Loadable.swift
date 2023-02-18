@@ -8,9 +8,9 @@
 
 import SwiftUI
 @available(iOS 16.0.0, *)
-public struct LoadingViewModifier: ViewModifier {
-    public var isLoading: Bool
-    public func body(content: Content) -> some View {
+private struct LoadingViewModifier: ViewModifier {
+    var isLoading: Bool
+    func body(content: Content) -> some View {
         content
             .redacted(reason: isLoading ? .placeholder : [])
             .overlay {
@@ -21,7 +21,7 @@ public struct LoadingViewModifier: ViewModifier {
 
 @available(iOS 16.0, *)
 public extension View {
-    func loadable(_ isLoading: Bool) -> some View {
+    func _lodable(_ isLoading: Bool) -> some View {
         ModifiedContent(content: self, modifier: LoadingViewModifier(isLoading: isLoading))
     }
 }

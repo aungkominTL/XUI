@@ -8,11 +8,10 @@
 import SwiftUI
 
 @available(iOS 13.0, *)
-public struct PushViewModifier<Destination: View>: ViewModifier {
+private struct PushViewModifier<Destination: View>: ViewModifier {
     
-    @ViewBuilder public var destination: (() -> Destination)
-    
-    public func body(content: Content) -> some View {
+    @ViewBuilder var destination: (() -> Destination)
+    func body(content: Content) -> some View {
         NavigationLink {
             destination()
         } label: {
@@ -24,7 +23,7 @@ public struct PushViewModifier<Destination: View>: ViewModifier {
 
 @available(iOS 13.0, *)
 public extension View {
-    func tapToPush<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
+    func _tapToPush<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
         ModifiedContent(content: self, modifier: PushViewModifier(destination: content))
     }
 }
