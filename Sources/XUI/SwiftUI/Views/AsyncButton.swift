@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 16.0, *)
-public struct _AsyncButton<Label: View>: View {
+public struct AsyncButton<Label: View>: View {
 
     var actionOptions = Set(ActionOption.allCases)
     let action: (@Sendable () async throws  -> Void)
@@ -103,7 +103,7 @@ public struct _AsyncButton<Label: View>: View {
 }
 
 @available(iOS 16.0, *)
-public extension _AsyncButton {
+public extension AsyncButton {
     enum ActionOption: CaseIterable {
         case disableButton
         case showProgressView
