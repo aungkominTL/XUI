@@ -8,7 +8,7 @@
 import SwiftUI
 @available(iOS 16.0, *)
 public struct FormCell<Left: View, Right: View>: View {
-
+    
     @ViewBuilder public var left: () -> Left
     @ViewBuilder public var right: () -> Right
 
