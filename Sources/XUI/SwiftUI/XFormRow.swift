@@ -10,9 +10,15 @@ import SwiftUI
 @available(iOS 16.0, *)
 public struct XFormRow<Content: View>: View {
 
-    public let title: String
-    public let isEmpty: Bool
-    public let content: () -> Content
+    private let title: String
+    private let isEmpty: Bool
+    private let content: () -> Content
+
+    public init(title: String, isEmpty: Bool, content: @escaping () -> Content) {
+        self.title = title
+        self.isEmpty = isEmpty
+        self.content = content
+    }
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
