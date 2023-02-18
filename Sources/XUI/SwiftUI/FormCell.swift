@@ -13,7 +13,7 @@ public struct FormCell<Left: View, Right: View>: View {
     @ViewBuilder private var left: () -> Left
     @ViewBuilder private var right: () -> Right
 
-    init(left: @escaping () -> Left, right: @escaping () -> Right) {
+    public init(left: @escaping () -> Left, right: @escaping () -> Right) {
         self.left = left
         self.right = right
     }
