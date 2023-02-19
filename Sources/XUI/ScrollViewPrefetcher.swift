@@ -39,7 +39,7 @@ public final class ScrollViewPrefetcher {
 
     /// SwiftUI sometimes calls onAppear in unexpected order, buffer takes care of it.
     ///
-    internal func scheduleRefreshIfNeeded() {
+    public func scheduleRefreshIfNeeded() {
         guard !isRefreshScheduled else { return }
         isRefreshScheduled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
