@@ -8,12 +8,17 @@
 import SwiftUI
 
 @available(iOS 16.0, *)
-struct BorderedProminentButton<Content: View>: View {
+public struct BorderedProminentButton<Content: View>: View {
     
     let action: () -> Void
     @ViewBuilder var label: () -> Content
 
-    var body: some View {
+    public init(action: @escaping () -> Void, label: @escaping () -> Content) {
+        self.action = action
+        self.label = label
+    }
+
+    public var body: some View {
         AsyncButton {
             action()
         } label: {
