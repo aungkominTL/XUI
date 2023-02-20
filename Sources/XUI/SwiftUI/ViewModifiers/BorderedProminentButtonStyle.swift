@@ -19,7 +19,7 @@ private struct BorderedProminentButtonStyle: ViewModifier {
         .frame(height: 45)
     }
 }
-@available(iOS 16.0.0, *)`
+@available(iOS 16.0.0, *)
 public extension View {
     func _borderedProminentButtonStyle() -> some View {
         ModifiedContent(content: self, modifier: BorderedProminentButtonStyle())
