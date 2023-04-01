@@ -114,8 +114,10 @@ public struct _AutoWrap<Items, ID, Content>: View where Items: RandomAccessColle
                     ForEach(model.ranges, id: \.self) { range in
                         HStack(spacing: hSpacing) {
                             ForEach(range, id: \.self) { i in
-                                content(items[i])
-                                    .modifier(WidthWithID(id: items[i][keyPath: keyPath]))
+                                if let item = items[safe: i] {
+                                    content(item)
+                                        .modifier(WidthWithID(id: items[i][keyPath: keyPath]))
+                                }
                             }
                         }
                     }
@@ -193,5 +195,11 @@ public struct _Tag<Content>: View where Content: View {
             .padding(.vertical, 5)
             .background(bgcolor)
             .cornerRadius(10)
+    }
+}
+
+extension Collection where Indices.Iterator.Element == Index {
+    public subscript(safe index: Index) -> Iterator.Element? {
+        return (startIndex <= index && index < endIndex) ? self[index] : nil
     }
 }
