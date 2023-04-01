@@ -12,9 +12,9 @@ public struct _Alert: Identifiable {
     public var id: String { title }
     private var title: String
     private var message: String?
-    private var onCancel: (() -> Void)?
+    private var onCancel: (() -> Void)
 
-    public init(title: String, message: String? = nil, onCancel: ( () -> Void)? = nil) {
+    public init(title: String, message: String? = nil, onCancel: @escaping (() -> Void) = {}) {
         self.title = title
         self.message = message
         self.onCancel = onCancel
