@@ -22,9 +22,9 @@ public struct _NumberTextField: View {
     private func getValue() -> String {
         if value.wrappedValue == 0 { return String() }
         if let delima {
-            return "\(delima)\(value)"
+            return "\(delima)\(value.wrappedValue)"
         }
-        return "\(value)"
+        return "\(value.wrappedValue)"
     }
 
     private func setValue(_ newValue: String) {
