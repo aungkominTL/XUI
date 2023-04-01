@@ -19,7 +19,7 @@ public struct _NumberTextField: View {
         self.delima = delima
     }
 
-    private func get() -> String {
+    private func getValue() -> String {
         if value.wrappedValue == 0 { return String() }
         if let delima {
             return "\(delima)\(value)"
@@ -27,7 +27,7 @@ public struct _NumberTextField: View {
         return "\(value)"
     }
 
-    private func set(_ newValue: String) {
+    private func setValue(_ newValue: String) {
         if let delima {
             value.wrappedValue = Int(newValue.replace(delima, with: String())) ?? 0
         } else {
@@ -36,7 +36,7 @@ public struct _NumberTextField: View {
     }
 
     public var body: some View {
-        TextField("Please input the \(title)", text: .init(get: get, set: set(_:)))
+        TextField("Please input the \(title)", text: .init(get: getValue, set: setValue(_:)))
             .keyboardType(.numberPad)
     }
 }
