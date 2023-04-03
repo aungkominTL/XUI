@@ -11,9 +11,9 @@ import SwiftUI
 public struct AsyncButton<Label: View>: View {
 
     var actionOptions = Set(ActionOption.allCases)
-    let action: (@Sendable () async throws  -> Void)
-    var onFinish: (@Sendable @MainActor () -> Void)?
-    var onError: (@Sendable @MainActor (Error) -> Void)?
+    let action: (() async throws  -> Void)
+    var onFinish: (@MainActor () -> Void)?
+    var onError: (@MainActor (Error) -> Void)?
     @ViewBuilder var label: () -> Label
 
     private var delay: Double = 0.2
