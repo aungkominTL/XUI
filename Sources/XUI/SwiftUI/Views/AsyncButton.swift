@@ -34,15 +34,17 @@ public struct AsyncButton<Label: View>: View {
 
     public var body: some View {
         Button {
-            _Haptics.shared.play(.soft)
-            if actionOptions.contains(.disableButton) {
-                isDisabled = true
-            }
-            Task {
-                var progressViewTask: Task<Void, Error>?
+            Task { @MainActor in
+                _Haptics.shared.play(.soft)
 
+                if actionOptions.contains(.disableButton) {
+                    isDisabled = true
+                }
+                
+                var progressViewTask: Task<Void, Error>?
                 if actionOptions.contains(.showProgressView) {
-                    progressViewTask = Task {
+                    progressViewTask = Task { @MainActor in
+                        if Task.isCancelled { return }
                         showProgressView = true
                     }
                     try await Task.sleep(for: .seconds(delay))
