@@ -26,7 +26,7 @@ private struct GroupedSectionStyle: ViewModifier {
             .shadow(color: .black.opacity(0.2), radius: paddingH, x: 0, y: paddingV)
     }
 }
-
+@available(iOS 16.0, *)
 public extension View {
     func _groupedSectionStyle(innerPadding: CGFloat = 0, cornorRadius: CGFloat = 0, paddingH: CGFloat = 5, paddingV: CGFloat = 5) -> some View {
         ModifiedContent(content: self, modifier: GroupedSectionStyle(innerPadding: innerPadding, cornorRadius: cornorRadius, paddingH: paddingH, paddingV: paddingV))

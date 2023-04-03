@@ -18,7 +18,7 @@ public class FileCache {
 
     static private let cache = [String: Codable]()
 
-    public static fileprivate func getURL(for directory: Directory) -> URL {
+    static fileprivate func getURL(for directory: FileCache.Directory) -> URL {
         var searchPathDirectory: FileManager.SearchPathDirectory
         switch directory {
         case .documents:
@@ -34,7 +34,7 @@ public class FileCache {
         }
     }
 
-    public static func store<T: Encodable>(_ object: T, to directory: Directory, as fileName: String) {
+    public static func store<T: Encodable>(_ object: T, to directory: FileCache.Directory, as fileName: String) {
         let url = getURL(for: directory).appendingPathComponent(fileName, isDirectory: false)
         let encoder = JSONEncoder()
         do {
@@ -48,7 +48,7 @@ public class FileCache {
         }
     }
 
-    public static func retrieve<T: Decodable>(_ fileName: String, from directory: Directory, as type: T.Type) -> T {
+    public static func retrieve<T: Decodable>(_ fileName: String, from directory: FileCache.Directory, as type: T.Type) -> T {
         let url = getURL(for: directory).appendingPathComponent(fileName, isDirectory: false)
 
         if !FileManager.default.fileExists(atPath: url.path) {
@@ -68,7 +68,7 @@ public class FileCache {
         }
     }
 
-    public static func clear(_ directory: Directory) {
+    public static func clear(_ directory: FileCache.Directory) {
         let url = getURL(for: directory)
         do {
             let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
@@ -80,7 +80,7 @@ public class FileCache {
         }
     }
 
-    public static func remove(_ fileName: String, from directory: Directory) {
+    public static func remove(_ fileName: String, from directory: FileCache.Directory) {
         let url = getURL(for: directory).appendingPathComponent(fileName, isDirectory: false)
         if FileManager.default.fileExists(atPath: url.path) {
             do {
@@ -91,7 +91,7 @@ public class FileCache {
         }
     }
 
-    public static func fileExists(_ fileName: String, in directory: Directory) -> Bool {
+    public static func fileExists(_ fileName: String, in directory: FileCache.Directory) -> Bool {
         let url = getURL(for: directory).appendingPathComponent(fileName, isDirectory: false)
         return FileManager.default.fileExists(atPath: url.path)
     }
