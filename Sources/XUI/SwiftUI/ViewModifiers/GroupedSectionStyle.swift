@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+@available(iOS 16.0, *)
 private struct GroupedSectionStyle: ViewModifier {
 
     let innerPadding: CGFloat
