@@ -12,7 +12,14 @@ public struct DotLoadingView: View {
     @State private var showCircle1 = false
     @State private var showCircle2 = false
     @State private var showCircle3 = false
-    
+
+    public
+    init(showCircle1: Bool = false, showCircle2: Bool = false, showCircle3: Bool = false) {
+        self.showCircle1 = showCircle1
+        self.showCircle2 = showCircle2
+        self.showCircle3 = showCircle3
+    }
+
     public var body: some View {
         HStack {
             Circle()
