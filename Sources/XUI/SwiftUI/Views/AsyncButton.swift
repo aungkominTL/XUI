@@ -21,7 +21,7 @@ public struct AsyncButton<Label: View>: View {
     @State private var showProgressView = false
     @State private var errrorAlert: _Alert?
 
-    public init(actionOptions: Set<ActionOption> = Set(ActionOption.allCases), action: @escaping (@Sendable () async throws  -> Void), label: @escaping () -> Label, onFinish: (@Sendable @MainActor () -> Void)? = nil, onError: (@Sendable @MainActor (Error) -> Void)? = nil) {
+    public init(actionOptions: Set<ActionOption> = Set(ActionOption.allCases), action: @escaping (() async throws  -> Void), label: @escaping () -> Label, onFinish: (@MainActor () -> Void)? = nil, onError: (@MainActor (Error) -> Void)? = nil) {
         self.actionOptions = actionOptions
         self.action = action
         self.label = label
