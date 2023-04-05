@@ -27,4 +27,53 @@ public extension String {
         }
         return ""
     }
+
+    var isWhitespace: Bool {
+        trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    func nsRange(from range: Range<String.Index>) -> NSRange {
+        NSRange(range, in: self)
+    }
+
+    var language: String { NSLinguisticTagger.dominantLanguage(for: self) ?? ""}
+
+    var nonLineBreak: String {
+        self.replacingOccurrences(of: " ", with: "\u{00a0}")
+    }
+
+    func contains(_ string: String, caseSensitive: Bool = true) -> Bool {
+        if !caseSensitive {
+            return range(of: string, options: .caseInsensitive) != nil
+        }
+        return range(of: string) != nil
+    }
+
+    func lines() -> [String] {
+        var result = [String]()
+        enumerateLines { line, _ in
+            result.append(line)
+        }
+        return result
+    }
+
+    func words() -> [String] {
+        let comps = components(separatedBy: CharacterSet.whitespacesAndNewlines)
+        return comps.filter { !$0.isWhitespace }
+    }
+
+    func nsRange() -> NSRange {
+        NSRange.init(self.startIndex..<self.endIndex, in: self)
+    }
+}
+
+public extension Optional where Wrapped: Collection {
+    var isNilOrEmpty: Bool {
+        return self?.isEmpty ?? true
+    }
+}
+public extension Optional where Wrapped == String {
+    var str: String {
+        return self ?? ""
+    }
 }
