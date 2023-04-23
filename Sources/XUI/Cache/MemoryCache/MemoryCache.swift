@@ -1,10 +1,3 @@
-//
-//  TinyCache.swift
-//  TinyCache
-//
-//  Created by Cody Kerns on 4/26/22.
-//
-
 import Foundation
 
 /// A small in-memory cache for Codable objects.

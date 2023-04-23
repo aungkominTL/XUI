@@ -1,9 +1,3 @@
-//
-//  Dates.swift
-//  TinyCache
-//
-//  Created by Cody Kerns on 4/26/22.
-//
 
 import Foundation
 

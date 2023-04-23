@@ -1,9 +1,3 @@
-//
-//  CacheProvidable.swift
-//  TinyCache
-//
-//  Created by Cody Kerns on 5/17/22.
-//
 
 import Foundation
 
