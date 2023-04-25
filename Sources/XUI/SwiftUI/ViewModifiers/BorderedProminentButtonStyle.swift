@@ -16,7 +16,7 @@ private struct BorderedProminentButtonStyle: ViewModifier {
                 .foregroundColor(Color(uiColor: .systemBackground))
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 45)
+        .frame(height: 44)
     }
 }
 @available(iOS 16.0.0, *)
