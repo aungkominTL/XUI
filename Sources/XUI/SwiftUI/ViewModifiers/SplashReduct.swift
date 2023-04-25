@@ -25,6 +25,9 @@ private struct SplashReductView: ViewModifier {
                     }
                 }
             }
+            .onAppear {
+                isActive = false
+            }
     }
 }
 @available(iOS 16.0.0, *)
