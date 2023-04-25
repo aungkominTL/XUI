@@ -26,7 +26,7 @@ private struct SplashReductView: ViewModifier {
                 }
             }
             .onDisappear {
-                isActive = false
+                isActive = true
             }
     }
 }
