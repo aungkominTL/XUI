@@ -40,7 +40,7 @@ public struct _EULAView: View {
                     hasAgreedEULA.wrappedValue = true
                 }
             } label: {
-                Text("I agree and continue")
+                Text(hasAgreedEULA.wrappedValue ? "Close" : "I agree and continue")
                     ._borderedProminentButtonStyle()
             }
             .padding(.horizontal)

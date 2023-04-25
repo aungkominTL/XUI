@@ -83,7 +83,7 @@ public struct _OnboardingView: View {
                             hasShownOnboarding.wrappedValue = true
                         }
                     } label: {
-                        Text("Done & Continue")
+                        Text(hasShownOnboarding.wrappedValue ? "Close" : "Done & Continue")
                     }
                     ._borderedProminentButtonStyle()
                 }
