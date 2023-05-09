@@ -1,2 +1,3 @@
 # XUI
-Make SwiftUI easy
+
+Make SwiftUI easy. Reusable SwiftUI helpers.
