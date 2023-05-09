@@ -1,3 +1,2 @@
 # XUI
-
-A description of this package.
+Make SwiftUI easy
