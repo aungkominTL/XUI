@@ -27,12 +27,16 @@ public struct _ConfirmButton<Content: View>: View {
             label()
         }
         .confirmationDialog("Dialog", isPresented: $isShown, actions: {
-            Button(role: nil, action: action) {
+            Button(role: .destructive, action: onConfirm) {
                 Text("Continue \(title)")
             }
         }, message: {
             Text("Comfirm to \(title)?")
         })
         .labelsHidden()
+    }
+    private func onConfirm() {
+        _Haptics.shared.play(.light)
+        action()
     }
 }
