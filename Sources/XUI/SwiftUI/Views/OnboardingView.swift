@@ -9,11 +9,11 @@ import SwiftUI
 
 @available(iOS 16.0.0, *)
 public struct _Onboarding: Identifiable, Hashable {
-
+    
     public let id = UUID()
-    let title: String
-    let subtitle: String
-    let imageName: String
+    public let title: String
+    public let subtitle: String
+    public let imageName: String
 
     public init(title: String, subtitle: String, imageName: String) {
         self.title = title

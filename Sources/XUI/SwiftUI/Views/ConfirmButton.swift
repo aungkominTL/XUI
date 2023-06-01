@@ -9,12 +9,12 @@ import SwiftUI
 @available(iOS 16.0, *)
 public struct _ConfirmButton<Content: View>: View {
 
-    private let title: String
+    private let message: String
     private let action: () -> Void
-    private var label: () -> Content
+    private let label: () -> Content
 
-    public init(title: String, action: @escaping () -> Void, @ViewBuilder label: @escaping () -> Content) {
-        self.title = title
+    public init(_ message: String, action: @escaping () -> Void, @ViewBuilder label: @escaping () -> Content) {
+        self.message = message
         self.action = action
         self.label = label
     }
@@ -26,14 +26,13 @@ public struct _ConfirmButton<Content: View>: View {
         } label: {
             label()
         }
-        .confirmationDialog("Dialog", isPresented: $isShown, actions: {
+        .confirmationDialog("Confirmation", isPresented: $isShown, actions: {
             Button(role: .destructive, action: onConfirm) {
-                Text("Continue \(title)")
+                Text("Continue \(message)")
             }
         }, message: {
-            Text("Comfirm to \(title)?")
+            Text("Comfirm to \(message)?")
         })
-        .labelsHidden()
     }
     private func onConfirm() {
         _Haptics.shared.play(.light)

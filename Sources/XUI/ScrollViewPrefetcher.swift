@@ -3,10 +3,8 @@
 import SwiftUI
 
 public protocol ScrollViewPrefetcherDelegate: AnyObject {
-    
     /// Returns all valid indices for the collection.
     func getAllIndicesForPrefetcher(_ prefetcher: ScrollViewPrefetcher) -> Range<Int>
-    
     func prefetcher(_ prefetcher: ScrollViewPrefetcher, prefetchItemsAt indices: [Int])
     func prefetcher(_ prefetcher: ScrollViewPrefetcher, cancelPrefechingForItemAt indices: [Int])
     
@@ -89,5 +87,4 @@ public final class ScrollViewPrefetcher {
         delegate?.prefetcher(self, prefetchItemsAt: addedIndices)
         delegate?.prefetcher(self, cancelPrefechingForItemAt: removedIndicides)
     }
-    
 }

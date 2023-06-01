@@ -8,13 +8,11 @@
 import Foundation
 
 public class FileCache {
-
-    fileprivate init() { }
+    private init() { }
 
     public enum Directory {
         case documents, caches
     }
-
     static private let cache = [String: Codable]()
 
     static fileprivate func getURL(for directory: FileCache.Directory) -> URL {

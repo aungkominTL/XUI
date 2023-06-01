@@ -47,7 +47,6 @@ public struct ReorderableForEach<Data, Content>: View where Data : Hashable, Con
     }
 
     struct ReorderDropDelegate<Data>: DropDelegate where Data : Equatable {
-
         let item: Data
         @Binding var data: [Data]
         @Binding var draggedItem: Data?

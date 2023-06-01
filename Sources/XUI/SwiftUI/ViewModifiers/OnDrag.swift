@@ -40,7 +40,7 @@ private struct _OnDragModifier: ViewModifier {
             .gesture(
                 DragGesture()
                     .onChanged { value in
-                        if direction.isValid(value: value, distance: 0) {
+                        if direction.isValid(value: value, distance: 10) {
                             switch direction {
                             case .left:
                                 offset.x = value.startLocation.x - value.location.x
@@ -61,7 +61,7 @@ private struct _OnDragModifier: ViewModifier {
         offset = .zero
         if direction.isValid(value: value, distance: distance) {
             _Haptics.shared.play(.soft)
-            perform()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: perform)
         }
     }
 }
