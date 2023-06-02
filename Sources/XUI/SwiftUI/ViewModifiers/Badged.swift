@@ -26,6 +26,3 @@ public extension View {
         ModifiedContent(content: self, modifier: XBadgedModifier(string: string))
     }
 }
-
-
-

@@ -20,7 +20,7 @@ public struct WrappedHStack<Data, V>: View where Data: RandomAccessCollection, V
 
     @State private var totalHeight: CGFloat
 
-    public init(_ models: Data, horizontalSpacing: CGFloat = 2, verticalSpacing: CGFloat = 2,
+    public init(_ models: Data, horizontalSpacing: CGFloat = 1, verticalSpacing: CGFloat = 1,
                 variant: WrappedHStackVariant = .lists, @ViewBuilder viewGenerator: @escaping ViewGenerator) {
         self.models = models
         self.horizontalSpacing = horizontalSpacing
@@ -122,10 +122,9 @@ public struct _Tag<Content>: View where Content: View {
     public var body: some View {
         content()
             .foregroundColor(fgcolor)
-            .fixedSize()
             .padding(.horizontal, 8)
-            .padding(.vertical, 5)
+            .padding(.vertical, 4)
             .background(bgcolor)
-            .cornerRadius(10)
+            .cornerRadius(8)
     }
 }

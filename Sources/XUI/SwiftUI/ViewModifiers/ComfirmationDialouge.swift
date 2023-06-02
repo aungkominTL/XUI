@@ -30,7 +30,7 @@ private struct XDialogModifier<DialogContent: View>: ViewModifier {
 
 @available(iOS 16.0, *)
 public extension View {
-    func _comfirmationDialouge<Content: View>(_ title: String = "Attention", message: String = "", @ViewBuilder _ content: @escaping @Sendable () -> Content) -> some View {
+    func _comfirmationDialouge<Content: View>(_ title: String = "Attention", message: String = "", @ViewBuilder _ content: @escaping () -> Content) -> some View {
         ModifiedContent(content: self, modifier: XDialogModifier(title: title, message: message, dialogContent: content))
     }
 }

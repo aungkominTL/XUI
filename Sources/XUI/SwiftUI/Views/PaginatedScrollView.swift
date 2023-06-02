@@ -44,31 +44,38 @@ public struct PaginatedScrollView<Content: View>: View {
     }
 
     public var body: some View {
-        ScrollView {
-            content()
-                .saveBounds(viewId: scrollAreaID)
-
-            if canLoadMore.wrappedValue {
-                ProgressView()
-                    .padding()
+        ScrollView(.vertical) {
+            VStack(spacing: 2) {
+                content()
+                VStack {
+                    if state == .starting {
+                        ProgressView()
+                    }
+                }
+                .frame(height: 50)
+                .if(canLoadMore.wrappedValue) { view in
+                    view
+                        .saveBounds(viewId: scrollAreaID)
+                }
             }
+            .padding(2)
+            ._flexible(.all)
         }
-        .retrieveBounds(viewId: scrollAreaID) { rect in
-            didUpdateVisibleRect(rect)
+        .retrieveBounds(viewId: scrollAreaID) {
+            didUpdateVisibleRect($0)
         }
         .coordinateSpace(name: scrollAreaID)
-        .scrollContentBackground(.visible)
     }
 
     private func didUpdateVisibleRect(_ value: CGRect?) {
+        guard canLoadMore.wrappedValue else { return }
         guard let value, state == .ready else {
             if state == .ended {
                 updateState(.ready)
             }
             return
         }
-        let screenHeight = UIScreen.main.bounds.height
-        let nearBottom = value.maxY - screenHeight < 0
+        let nearBottom = value.maxY - UIScreen.main.bounds.height < 0
         guard nearBottom else { return }
         Task {
             updateState(.starting)

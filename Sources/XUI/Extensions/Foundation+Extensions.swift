@@ -122,3 +122,6 @@ public extension Bundle {
     }
 }
 
+extension Int: Identifiable {
+    public var id: Int { self }
+}
