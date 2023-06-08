@@ -35,7 +35,8 @@ public struct WrappedHStack<Data, V>: View where Data: RandomAccessCollection, V
             GeometryReader { geometry in
                 self.generateContent(in: geometry)
             }
-        }.modifier(FrameViewModifier(variant: self.variant, totalHeight: $totalHeight))
+        }
+        .modifier(FrameViewModifier(variant: self.variant, totalHeight: $totalHeight))
     }
 
     private func generateContent(in geometry: GeometryProxy) -> some View {
@@ -113,7 +114,7 @@ public struct _Tag<Content>: View where Content: View {
     private let bgcolor: Color
 
 
-    public init(fgcolor: Color? = .init(uiColor: .systemBackground), bgcolor: Color? = .secondary, @ViewBuilder content: @escaping () -> Content) {
+    public init(fgcolor: Color? = .init(uiColor: .systemBackground), bgcolor: Color? = .gray, @ViewBuilder content: @escaping () -> Content) {
         self.content = content
         self.fgcolor = fgcolor ?? .black
         self.bgcolor = bgcolor ?? .gray

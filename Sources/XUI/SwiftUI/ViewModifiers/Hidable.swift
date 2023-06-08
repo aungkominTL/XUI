@@ -11,9 +11,7 @@ import SwiftUI
 private struct HidableModifier: ViewModifier {
     @Binding var isHidden: Bool
     public func body(content: Content) -> some View {
-        if !isHidden {
-            content
-        }
+        isHidden ? nil : content
     }
 }
 @available(iOS 16.0.0, *)

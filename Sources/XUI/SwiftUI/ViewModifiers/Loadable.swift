@@ -12,7 +12,6 @@ private struct LoadingViewModifier: ViewModifier {
     var isLoading: Bool
     func body(content: Content) -> some View {
         content
-            .redacted(reason: isLoading ? .placeholder : [])
             .overlay {
                 isLoading ? ProgressView() : nil
             }
