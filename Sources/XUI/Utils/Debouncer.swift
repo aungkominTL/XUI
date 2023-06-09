@@ -5,28 +5,25 @@
 //  Created by Aung Ko Min on 17/5/23.
 //
 
-import SwiftUI
+import Foundation
 import Combine
 
 public class Debouncer: ObservableObject {
 
-    public var onUpdate: (() -> Void)?
-    private let queue = DispatchQueue(label: "com.jonahaung.HomeForYou.Debouncer", qos: .userInitiated)
-    private var cancellables = Set<AnyCancellable>()
     @Published private var counter = 0
+    private var cancellables = Set<AnyCancellable>()
+    public var onUpdate: (() -> Void) = {}
 
     public init() {
         $counter
             .removeDuplicates()
-            .debounce(for: 0.2, scheduler: self.queue)
+            .debounce(for: 0.2, scheduler: RunLoop.current)
             .sink { [weak self] value in
                 guard let self else { return }
-                DispatchQueue.main.async {
-                    if value > 0 {
-                        self.deQueue()
-                    } else {
-                        self.onUpdate?()
-                    }
+                if value == 0 {
+                    self.onUpdate()
+                } else {
+                    self.deQueue()
                 }
             }
             .store(in: &cancellables)
@@ -36,7 +33,8 @@ public class Debouncer: ObservableObject {
         counter += 1
     }
 
-    public func deQueue() {
+    private func deQueue() {
         counter = 0
+        print("deque")
     }
 }

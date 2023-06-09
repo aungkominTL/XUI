@@ -15,7 +15,6 @@ private struct AlertPresenter: ViewModifier {
     }
 }
 
-
 @available(iOS 13.0, *)
 public extension View {
     func _alert(_ alertItem: Binding<_Alert?>) -> some View {
