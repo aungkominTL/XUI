@@ -19,20 +19,32 @@ public struct _Label<Left, Right>: View where Left: View, Right: View {
         self.left = left
         self.right = right
     }
-    public init(spacing: CGFloat = 5, iconName: String, text: String) {
-        self.spacing = spacing
-        self.left = {
-            Image(systemName: iconName) as! Left
-        }
-        self.right = {
-            Text(text) as! Right
-        }
-    }
+
     public var body: some View {
         HStack(spacing: spacing) {
             left()
-                .imageScale(.small)
             right()
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+public struct _IconLabel: View {
+
+    private let spacing: CGFloat
+    private var icon: String
+    private var title: String
+
+    public init(_ title: String, icon: String, spacing: CGFloat = 0) {
+        self.spacing = spacing
+        self.icon = icon
+        self.title = title
+    }
+    public var body: some View {
+        _Label(spacing: spacing) {
+            Image(systemName: icon)
+        } right: {
+            Text(title)
         }
     }
 }
