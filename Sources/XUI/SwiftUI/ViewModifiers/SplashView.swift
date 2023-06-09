@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0.0, *)
+
 private struct SplashView<SplashContent: View>: ViewModifier {
 
     private let timeout: TimeInterval
@@ -34,7 +34,7 @@ private struct SplashView<SplashContent: View>: ViewModifier {
         }
     }
 }
-@available(iOS 16.0.0, *)
+
 public extension View {
     func _splashVeiw<SplashContent: View>(timeout: TimeInterval = 2.5, @ViewBuilder splashContent: @escaping () -> SplashContent) -> some View {
         modifier(SplashView(timeout: timeout, splashContent: splashContent))

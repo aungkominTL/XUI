@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0.0, *)
 public struct _Onboarding: Identifiable, Hashable {
     
     public let id = UUID()
@@ -22,7 +21,6 @@ public struct _Onboarding: Identifiable, Hashable {
     }
 }
 
-@available(iOS 16.0.0, *)
 public struct _OnboardingView: View {
 
     private var hasShownOnboarding: Binding<Bool>
@@ -113,7 +111,6 @@ public struct _OnboardingView: View {
     }
 }
 
-@available(iOS 16.0.0, *)
 private struct OnboardingCell: View {
     let item: _Onboarding
     let index: Int

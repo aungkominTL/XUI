@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0, *)
+
 public struct _EULAView: View {
 
     private var hasAgreedEULA: Binding<Bool>

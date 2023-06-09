@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0.0, *)
+
 private struct SplashReductView: ViewModifier {
     private let timeout: TimeInterval
     @State private var isActive = true
@@ -30,7 +30,7 @@ private struct SplashReductView: ViewModifier {
             }
     }
 }
-@available(iOS 16.0.0, *)
+
 public extension View {
     func _splashReduct(for timeout: TimeInterval = 0.5) -> some View {
         modifier(SplashReductView(timeout: timeout))

@@ -5,8 +5,9 @@
 //  Created by Aung Ko Min on 27/1/23.
 //
 
-import Foundation
+import SwiftUI
 
+// Strin
 public extension String {
     
     func replace(_ target: String, with string: String) -> String {
@@ -31,6 +32,7 @@ public extension String {
     var isWhitespace: Bool {
         trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+    var notEmpty: Bool { !isWhitespace }
     
     func nsRange(from range: Range<String.Index>) -> NSRange {
         NSRange(range, in: self)
@@ -65,6 +67,32 @@ public extension String {
     func nsRange() -> NSRange {
         NSRange.init(self.startIndex..<self.endIndex, in: self)
     }
+
+    var localizedKey: LocalizedStringKey {
+        .init(self)
+    }
+    
+    var stringsBesideColon: (String?, String) {
+        let strings = split(separator: ":").map(String.init)
+        if strings.count == 2, strings[0].notEmpty {
+            return (strings[0], strings[1])
+        }
+        return (nil, self)
+    }
+    var firstLetterCapitalized: String {
+        prefix(1).capitalized + dropFirst()
+    }
+
+}
+
+// Optional
+public extension Optional {
+    var forceUnwrapped: Wrapped! {
+        if let value = self {
+            return value
+        }
+        fatalError()
+    }
 }
 
 public extension Optional where Wrapped: Collection {
@@ -78,18 +106,6 @@ public extension Optional where Wrapped == String {
     }
 }
 
-public extension Array where Element: Hashable {
-    func uniqued() -> [Element] {
-        var seen = Set<Element>()
-        return filter{ seen.insert($0).inserted }
-    }
-}
-
-public extension Collection where Indices.Iterator.Element == Index {
-    subscript(safe index: Index) -> Iterator.Element? {
-        return (startIndex <= index && index < endIndex) ? self[index] : nil
-    }
-}
 
 public extension Bundle {
     func decode<T: Decodable>(_ type: T.Type, from file: String, dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate, keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) -> T {
@@ -124,4 +140,93 @@ public extension Bundle {
 
 extension Int: Identifiable {
     public var id: Int { self }
+}
+
+public extension DispatchQueue {
+    static func safeAsync(execute work: () -> Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.sync(execute: work)
+        }
+    }
+}
+
+// Array
+public extension Array where Element: Hashable {
+    func uniqued() -> [Element] {
+        var seen = Set<Element>()
+        return filter{ seen.insert($0).inserted }
+    }
+}
+
+public extension Collection where Indices.Iterator.Element == Index {
+    subscript(safe index: Index) -> Iterator.Element? {
+        return (startIndex <= index && index < endIndex) ? self[index] : nil
+    }
+}
+
+public extension Array {
+
+    mutating func shuffle() {
+        if count == 0 {
+            return
+        }
+
+        for i in 0..<(count - 1) {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            if j != i {
+                self.swapAt(i, j)
+            }
+        }
+    }
+
+    func shuffled() -> [Element] {
+        var list = self
+        list.shuffle()
+
+        return list
+    }
+    func random() -> Element? {
+        return (count > 0) ? self.shuffled()[0] : nil
+    }
+    func random(_ count: Int = 1) -> [Element] {
+        let result = shuffled()
+
+        return (count > result.count) ? result : Array(result[0..<count])
+    }
+
+    func removeDuplicates(by predicate: (Element, Element) -> Bool) -> Self {
+        var result = [Element]()
+        for value in self where result.filter({ predicate($0, value) }).isEmpty {
+            result.append(value)
+        }
+        return result
+    }
+    func removeDuplicates(by keyPath: KeyPath<Element, String>) -> Self {
+        removeDuplicates(by: { $0[keyPath: keyPath] == $1[keyPath: keyPath] })
+    }
+    func removeDuplicates() -> Self where Element: Equatable {
+        removeDuplicates(by: ==)
+    }
+}
+
+
+// MARK: Dictionary
+public extension Dictionary {
+    var tuples: [(Key, Value)] {
+        map({ ($0.key, $0.value) })
+    }
+}
+
+// MARK: TimeInterval
+public extension TimeInterval {
+    static let oneYear: Self = .init(60 * 60 * 24 * 365)
+    static let oneWeek: Self = .init(60 * 60 * 24 * 7)
+}
+
+public extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }

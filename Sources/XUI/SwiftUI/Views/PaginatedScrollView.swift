@@ -7,27 +7,25 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 public typealias _AsyncAction = (@Sendable () async -> Void)
-@available(iOS 16.0, *)
+
 struct LoadMoreKey: EnvironmentKey {
     static let defaultValue: _AsyncAction? = nil
 }
-@available(iOS 16.0, *)
+
 extension EnvironmentValues {
     var loadMore: _AsyncAction? {
         get { self[LoadMoreKey.self] }
         set { self[LoadMoreKey.self] = newValue }
     }
 }
-@available(iOS 16.0, *)
+
 extension PaginatedScrollView {
     public func moreLoadable(action: @escaping _AsyncAction) -> some View {
         environment(\.loadMore, action)
     }
 }
 
-@available(iOS 16.0, *)
 public struct PaginatedScrollView<Content: View>: View {
     enum LoadingState: Hashable {
         case ready, starting, ended

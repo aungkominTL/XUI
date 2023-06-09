@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0.0, *)
 public struct _PageTabView<Items, ID, Content>: View where Items: RandomAccessCollection, ID: Hashable, Content: View {
 
     let items: Array<Items.Element>

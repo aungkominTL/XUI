@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Combine
-@available(iOS 16.0.0, *)
+
 public class Debouncer: ObservableObject {
 
     public var onUpdate: (() -> Void)?

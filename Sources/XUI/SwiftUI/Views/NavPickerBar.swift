@@ -6,22 +6,21 @@
 //
 
 import SwiftUI
-import XUI
-@available(iOS 16.0, *)
+
 public protocol _PickableItem {
     var title: String { get }
 }
-@available(iOS 16.0, *)
+
 extension _PickableItem {
     var isEmpty: Bool { title.isWhitespace }
 }
-@available(iOS 16.0, *)
+
 extension String: _PickableItem {
     public var title: String {
         self
     }
 }
-@available(iOS 16.0, *)
+
 public struct _NavPickerBar<Item: _PickableItem>: View {
     private let title: String
     private let items: [Item]
@@ -51,7 +50,7 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
         }
     }
 }
-@available(iOS 16.0, *)
+
 private struct XPickerView<Item: _PickableItem>: View {
     let title: String
     let items: [Item]

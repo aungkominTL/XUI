@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 13.0, *)
+
 private struct DeviceRotationViewModifier: ViewModifier {
     let action: (UIDeviceOrientation) -> Void
     func body(content: Content) -> some View {
@@ -17,7 +17,7 @@ private struct DeviceRotationViewModifier: ViewModifier {
             }
     }
 }
-@available(iOS 13.0, *)
+
 public extension View {
     func _onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
         self.modifier(DeviceRotationViewModifier(action: action))

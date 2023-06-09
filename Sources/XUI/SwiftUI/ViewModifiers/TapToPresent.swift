@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 private struct PresentSheetModifier<Destination: View>: ViewModifier {
 
     @ViewBuilder var destination: (() -> Destination)
@@ -28,7 +27,7 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
         }
     }
 }
-@available(iOS 16.0, *)
+
 private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
 
     @ViewBuilder var destination: (() -> Destination)

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0.0, *)
 private struct OnAppearAfterModifier: ViewModifier {
 
     private let timeout: TimeInterval
@@ -28,7 +27,6 @@ private struct OnAppearAfterModifier: ViewModifier {
     }
 }
 
-@available(iOS 16.0.0, *)
 public extension View {
     func _onAppear(after timeout: TimeInterval, _ perform: @escaping () -> Void) -> some View {
         modifier(OnAppearAfterModifier(timeout: timeout, perform: perform))

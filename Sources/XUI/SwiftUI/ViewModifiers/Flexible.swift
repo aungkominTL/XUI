@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0.0, *)
 private struct FlexibleModifier: ViewModifier {
     let edge: Edge.Set
     func body(content: Content) -> some View {
@@ -16,7 +15,7 @@ private struct FlexibleModifier: ViewModifier {
     }
 }
 
-@available(iOS 16.0, *)
+
 public extension View {
     func _flexible(_ edge: Edge.Set) -> some View {
         ModifiedContent(content: self, modifier: FlexibleModifier(edge: edge))

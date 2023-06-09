@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0, *)
+
 public struct _ConfirmButton<Content: View>: View {
 
     private let message: String
@@ -35,7 +35,7 @@ public struct _ConfirmButton<Content: View>: View {
         })
     }
     private func onConfirm() {
-        _Haptics.shared.play(.light)
+        _Haptics.play(.light)
         action()
     }
 }

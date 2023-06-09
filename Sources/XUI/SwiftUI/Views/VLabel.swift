@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
-
 public struct _VLabel<Top, Bottom>: View where Top: View, Bottom: View {
 
     private let spacing: CGFloat

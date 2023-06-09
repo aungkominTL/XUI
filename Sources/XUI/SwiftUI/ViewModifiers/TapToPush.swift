@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 15.0, *)
 private struct PushViewModifier<Destination: View>: ViewModifier {
     
     @ViewBuilder var destination: (() -> Destination)
@@ -21,7 +20,6 @@ private struct PushViewModifier<Destination: View>: ViewModifier {
     }
 }
 
-@available(iOS 15.0, *)
 public extension View {
     func _tapToPush<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
         ModifiedContent(content: self, modifier: PushViewModifier(destination: content))

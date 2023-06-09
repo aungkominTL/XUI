@@ -6,23 +6,40 @@
 //
 
 import UIKit
+import AudioToolbox
 
-public class _Haptics {
-
-    public static var shared: _Haptics {
-        get { _shared }
-        set { _shared = newValue }
-    }
-    @AtomicQueue
-    private static var _shared = _Haptics()
-
-    private init() { }
-
-    public func play(_ feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle) {
-        UIImpactFeedbackGenerator(style: feedbackStyle).impactOccurred()
+public struct _Haptics {
+    public static func play(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        guard !isLegacyTapticEngine else {
+            generateLegacyFeedback()
+            return
+        }
+        UIImpactFeedbackGenerator(style: style).impactOccurred()
     }
 
-    public func notify(_ feedbackType: UINotificationFeedbackGenerator.FeedbackType) {
-        UINotificationFeedbackGenerator().notificationOccurred(feedbackType)
+    public static func generateNotificationFeedback(style: UINotificationFeedbackGenerator.FeedbackType) {
+        guard !isLegacyTapticEngine else {
+            generateLegacyFeedback()
+            return
+        }
+        UINotificationFeedbackGenerator().notificationOccurred(style)
     }
+
+    private static func generateLegacyFeedback() {
+        AudioServicesPlaySystemSound(1519)
+        AudioServicesPlaySystemSound(1520)
+        AudioServicesPlaySystemSound(1521)
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+    }
+
+    private static let isLegacyTapticEngine: Bool = {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        return ["iPhone8,1", "iPhone8,2"].contains(identifier)
+    }()
 }

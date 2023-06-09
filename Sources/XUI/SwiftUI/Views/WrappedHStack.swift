@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 13.0, *)
 public struct WrappedHStack<Data, V>: View where Data: RandomAccessCollection, V: View {
     // MARK: - Properties
     public typealias ViewGenerator = (Data.Element) -> V
@@ -75,7 +74,7 @@ public struct WrappedHStack<Data, V>: View where Data: RandomAccessCollection, V
         .background(viewHeightReader($totalHeight))
     }
 }
-@available(iOS 13.0, *)
+
 public func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
     return GeometryReader { geometry -> Color in
         let rect = geometry.frame(in: .local)
@@ -85,12 +84,12 @@ public func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
         return .clear
     }
 }
-@available(iOS 13.0, *)
+
 public enum WrappedHStackVariant {
     case lists // ScrollView/List/LazyVStack
     case stacks // VStack/ZStack
 }
-@available(iOS 13.0, *)
+
 internal struct FrameViewModifier: ViewModifier {
     var variant: WrappedHStackVariant
     @Binding var totalHeight: CGFloat
@@ -106,7 +105,6 @@ internal struct FrameViewModifier: ViewModifier {
     }
 }
 
-@available(iOS 16.0, *)
 public struct _Tag<Content>: View where Content: View {
 
     private let content: () -> Content

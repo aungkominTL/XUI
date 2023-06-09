@@ -5,11 +5,13 @@ import PackageDescription
 
 let package = Package(
     name: "XUI",
+    platforms: [.iOS(.v16)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "XUI",
             targets: ["XUI"]),
+        
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.

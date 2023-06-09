@@ -26,7 +26,6 @@ public enum DragDirection: Hashable {
     }
 }
 
-@available(iOS 13.0.0, *)
 private struct _OnDragModifier: ViewModifier {
 
     let direction: DragDirection
@@ -60,13 +59,12 @@ private struct _OnDragModifier: ViewModifier {
     private func handleDrag(_ value: DragGesture.Value) {
         offset = .zero
         if direction.isValid(value: value, distance: distance) {
-            _Haptics.shared.play(.soft)
+            _Haptics.play(.soft)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: perform)
         }
     }
 }
 
-@available(iOS 13.0.0, *)
 public extension View {
     func _onDrag(_ direction: DragDirection, _ distance: CGFloat = 100, _ perform: @escaping () -> Void) -> some View {
         modifier(_OnDragModifier(direction: direction, distance: distance, perform: perform))

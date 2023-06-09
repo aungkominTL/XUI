@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0.0, *)
+
 private struct BorderedProminentButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
@@ -19,14 +19,13 @@ private struct BorderedProminentButtonStyle: ViewModifier {
         .frame(height: 40)
     }
 }
-@available(iOS 16.0.0, *)
+
 public extension View {
     func _borderedProminentButtonStyle() -> some View {
         ModifiedContent(content: self, modifier: BorderedProminentButtonStyle())
     }
 }
 
-@available(iOS 16.0.0, *)
 private struct BorderedProminentLightButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
@@ -38,7 +37,7 @@ private struct BorderedProminentLightButtonStyle: ViewModifier {
         .frame(height: 40)
     }
 }
-@available(iOS 16.0.0, *)
+
 public extension View {
     func _borderedProminentLightButtonStyle() -> some View {
         ModifiedContent(content: self, modifier: BorderedProminentLightButtonStyle())

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0, *)
+
 public struct _DismissButton: View {
 
     private let isProtected: Bool

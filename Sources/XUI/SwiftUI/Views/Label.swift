@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 public struct _Label<Left, Right>: View where Left: View, Right: View {
 
     private let spacing: CGFloat
@@ -28,7 +27,6 @@ public struct _Label<Left, Right>: View where Left: View, Right: View {
     }
 }
 
-@available(iOS 16.0, *)
 public struct _IconLabel: View {
 
     private let spacing: CGFloat

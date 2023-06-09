@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-@available(iOS 16.0, *)
 
 public struct _FormCell<Left: View, Right: View>: View {
     

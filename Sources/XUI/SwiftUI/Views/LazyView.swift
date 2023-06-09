@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-@available(iOS 13.0, *)
 public struct _LazyView<Content: View>: View {
 
     private let build: () -> Content

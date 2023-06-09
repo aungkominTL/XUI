@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@available(iOS 16.0, *)
+
 public struct DotLoadingView: View {
     
     @State private var showCircle1 = false

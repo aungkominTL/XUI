@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-@available(iOS 16.0.0, *)
 
 private struct XBadgedModifier: ViewModifier {
     let string: String
@@ -20,7 +19,7 @@ private struct XBadgedModifier: ViewModifier {
         }
     }
 }
-@available(iOS 16.0, *)
+
 public extension View {
     func _badged(_ string: String) -> some View {
         ModifiedContent(content: self, modifier: XBadgedModifier(string: string))

@@ -7,24 +7,23 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 struct SaveBoundsPrefData: Equatable {
     let viewId: AnyHashable
     let bounds: CGRect
 }
-@available(iOS 16.0, *)
+
 struct SaveSizePrefData: Equatable {
     let viewId: String
     let size: CGSize
 }
-@available(iOS 16.0, *)
+
 struct SaveBoundsPrefKey: PreferenceKey {
     static var defaultValue: [SaveBoundsPrefData] = []
     static func reduce(value: inout [SaveBoundsPrefData], nextValue: () -> [SaveBoundsPrefData]) {
         value.append(contentsOf: nextValue())
     }
 }
-@available(iOS 16.0, *)
+
 struct SaveSizePrefKey: PreferenceKey {
     static var defaultValue: [SaveSizePrefData]? = nil
     static func reduce(value: inout [SaveSizePrefData]?, nextValue: () -> [SaveSizePrefData]?) {
@@ -34,7 +33,6 @@ struct SaveSizePrefKey: PreferenceKey {
 }
 
 
-@available(iOS 16.0, *)
 extension View {
     public func saveBounds(viewId: AnyHashable, coordinateSpace: CoordinateSpace = .global) -> some View {
         background(GeometryReader { proxy in

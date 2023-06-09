@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16.0, *)
 public struct AsyncButton<Label: View>: View {
 
     var actionOptions = Set(ActionOption.allCases)
@@ -35,7 +34,7 @@ public struct AsyncButton<Label: View>: View {
     public var body: some View {
         Button {
             Task { @MainActor in
-                _Haptics.shared.play(.soft)
+                _Haptics.play(.soft)
 
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
@@ -81,9 +80,9 @@ public struct AsyncButton<Label: View>: View {
     @MainActor
     private func handleError(_ error: Error) {
         if let onError {
-            _Haptics.shared.notify(.error)
+            _Haptics.play(.rigid)
             errrorAlert = .init(title: "Error", message: error.localizedDescription) {
-                _Haptics.shared.play(.light)
+                _Haptics.play(.light)
                 onError(error)
             }
         }
@@ -92,9 +91,9 @@ public struct AsyncButton<Label: View>: View {
     private func handleFinish() {
         if let onFinish {
             if actionOptions.contains(.showFinishAlert) {
-                _Haptics.shared.notify(.success)
+                _Haptics.play(.rigid)
                 errrorAlert = .init(title: "Success") {
-                    _Haptics.shared.play(.light)
+                    _Haptics.play(.light)
                     onFinish()
                 }
             } else {
@@ -104,7 +103,6 @@ public struct AsyncButton<Label: View>: View {
     }
 }
 
-@available(iOS 16.0, *)
 public extension AsyncButton {
     enum ActionOption: CaseIterable {
         case disableButton

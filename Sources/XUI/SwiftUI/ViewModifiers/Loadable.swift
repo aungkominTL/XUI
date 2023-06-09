@@ -7,7 +7,7 @@
 
 
 import SwiftUI
-@available(iOS 16.0.0, *)
+
 private struct LoadingViewModifier: ViewModifier {
     var isLoading: Bool
     func body(content: Content) -> some View {
@@ -18,7 +18,6 @@ private struct LoadingViewModifier: ViewModifier {
     }
 }
 
-@available(iOS 16.0, *)
 public extension View {
     func _lodable(_ isLoading: Bool) -> some View {
         ModifiedContent(content: self, modifier: LoadingViewModifier(isLoading: isLoading))
