@@ -33,16 +33,19 @@ public struct _IconLabel: View {
     private var icon: String
     private var title: String
 
-    public init(_ title: String, icon: String, spacing: CGFloat = 0) {
+    public init(icon: String, _ title: String, spacing: CGFloat = 0) {
         self.spacing = spacing
         self.icon = icon
         self.title = title
+    }
+    public init(_ systemImageName: SystemImageName, _ title: String, spacing: CGFloat = 2) {
+        self.init(icon: systemImageName.rawValue, title, spacing: spacing)
     }
     public var body: some View {
         _Label(spacing: spacing) {
             Image(systemName: icon)
         } right: {
-            Text(title)
+            Text(.init(title))
         }
     }
 }

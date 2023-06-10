@@ -1,32 +1,18 @@
 //
-//  UI+Extensions.swift
-//  HomeForYou
+//  File.swift
+//  
 //
-//  Created by Aung Ko Min on 17/2/23.
+//  Created by Aung Ko Min on 10/6/23.
 //
 
 import SwiftUI
-
-public extension View {
-    @ViewBuilder func `if` <Content: View>(_ condition: Bool, _ transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
-        }
-    }
-
-    func size(_ size: CGSize) -> some View {
-        self.frame(width: size.width, height: size.height)
-    }
-}
-
-extension Task where Success == Never, Failure == Never {
-    static func sleep(seconds: Double) async throws {
-        let duration = UInt64(seconds * 1_000_000_000)
-        try await Task.sleep(nanoseconds: duration)
-    }
-}
+#if os(iOS)
+import UIKit
+#elseif os(watchOS)
+import WatchKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 public extension Color {
     init?(hex: String) {
@@ -61,21 +47,14 @@ public extension Color {
     }
 }
 
-import SwiftUI
-#if os(iOS)
-import UIKit
-#elseif os(watchOS)
-import WatchKit
-#elseif os(macOS)
-import AppKit
-#endif
+
 
 private extension Color {
-    #if os(macOS)
+#if os(macOS)
     typealias SystemColor = NSColor
-    #else
+#else
     typealias SystemColor = UIColor
-    #endif
+#endif
 
     struct RGBA {
         let red: CGFloat
@@ -90,11 +69,11 @@ private extension Color {
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
 
-        #if os(macOS)
+#if os(macOS)
         SystemColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        #else
+#else
         guard SystemColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha) else { return nil }
-        #endif
+#endif
 
         return RGBA(red: red, green: green, blue: blue, alpha: alpha)
     }
