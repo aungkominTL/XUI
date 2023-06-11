@@ -4,7 +4,7 @@ import Foundation
 public extension CacheProvider {
     
     class MemoryProvider: CacheProvidable {
-        @AtomicQueue
+        @Atomic
         fileprivate var cache: [String: MemoryCacheValue] = [:]
         
         public func set(key: String, value: Codable, expiresAt: Date) {

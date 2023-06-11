@@ -44,6 +44,7 @@ public struct _IconLabel: View {
     public var body: some View {
         _Label(spacing: spacing) {
             Image(systemName: icon)
+                .imageScale(.small)
         } right: {
             Text(.init(title))
         }

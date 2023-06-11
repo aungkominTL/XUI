@@ -43,22 +43,20 @@ public struct PaginatedScrollView<Content: View>: View {
 
     public var body: some View {
         ScrollView(.vertical) {
-            VStack(spacing: 2) {
+            VStack(spacing: 0) {
                 content()
                 VStack {
-                    if state == .starting {
+                    if canLoadMore.wrappedValue {
                         ProgressView()
                     }
                 }
-                .frame(height: 50)
-                .if(canLoadMore.wrappedValue) { view in
-                    view
-                        .saveBounds(viewId: scrollAreaID)
-                }
+                .frame(height: 100)
+                .saveBounds(viewId: scrollAreaID)
             }
-            .padding(2)
             ._flexible(.all)
         }
+        .scrollIndicators(.hidden)
+        .scrollContentBackground(.hidden)
         .retrieveBounds(viewId: scrollAreaID) {
             didUpdateVisibleRect($0)
         }
@@ -81,7 +79,6 @@ public struct PaginatedScrollView<Content: View>: View {
             updateState(.ended)
         }
     }
-
     func updateState(_ newValue: LoadingState) {
         state = newValue
     }

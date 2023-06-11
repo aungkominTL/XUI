@@ -22,11 +22,12 @@ private struct SplashView<SplashContent: View>: ViewModifier {
     public func body(content: Content) -> some View {
         if isActive {
             splashContent()
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                        withAnimation {
-                            self.isActive = false
-                        }
+                .task {
+                    do {
+                        try await Task.sleep(for: .seconds(timeout))
+                        isActive = false
+                    } catch {
+                        print(error)
                     }
                 }
         } else {

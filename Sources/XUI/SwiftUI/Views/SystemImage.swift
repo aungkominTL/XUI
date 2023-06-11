@@ -8,7 +8,7 @@
 import SwiftUI
 
 public enum SystemImageName: String {
-    case phone, message, envelope, calendar, eye, mappin, tram
+    case phone, message, envelope, calendar, eye, mappin, tram, heart
     case building_2_crop_cricle = "building.2.crop.circle"
 }
 

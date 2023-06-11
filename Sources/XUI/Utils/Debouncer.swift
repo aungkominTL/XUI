@@ -17,7 +17,7 @@ public class Debouncer: ObservableObject {
     public init() {
         $counter
             .removeDuplicates()
-            .debounce(for: 0.2, scheduler: RunLoop.current)
+            .debounce(for: 0.2, scheduler: RunLoop.main)
             .sink { [weak self] value in
                 guard let self else { return }
                 if value == 0 {

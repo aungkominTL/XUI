@@ -34,13 +34,19 @@ struct SaveSizePrefKey: PreferenceKey {
 
 
 extension View {
-    public func saveBounds(viewId: AnyHashable, coordinateSpace: CoordinateSpace = .global) -> some View {
-        background(GeometryReader { proxy in
-            Color.clear.preference(key: SaveBoundsPrefKey.self, value: [SaveBoundsPrefData(viewId: viewId, bounds: proxy.frame(in: coordinateSpace))])
-        })
+    public func saveBounds(viewId: AnyHashable?, coordinateSpace: CoordinateSpace = .global) -> some View {
+        Group {
+            if let viewId = viewId {
+                background(GeometryReader { proxy in
+                    Color.clear.preference(key: SaveBoundsPrefKey.self, value: [SaveBoundsPrefData(viewId: viewId, bounds: proxy.frame(in: coordinateSpace))])
+                })
+            } else {
+                self
+            }
+        }
     }
 
-    public func retrieveBounds(viewId: AnyHashable, _ rect: Binding<CGRect>) -> some View {
+    public func retrieveBounds(viewId: AnyHashable?, _ rect: Binding<CGRect>) -> some View {
         onPreferenceChange(SaveBoundsPrefKey.self) { preferences in
             let preference = preferences.first(where: { $0.viewId == viewId })
             if let preference {
@@ -48,13 +54,22 @@ extension View {
             }
         }
     }
-    public func retrieveBounds(viewId: AnyHashable, _ completion: @escaping (CGRect) -> Void) -> some View {
-        onPreferenceChange(SaveBoundsPrefKey.self) { preferences in
-            let preference = preferences.first(where: { $0.viewId == viewId })
-            if let preference {
-                completion(preference.bounds)
+    public func retrieveBounds(viewId: AnyHashable?, _ completion: @escaping (CGRect) -> Void) -> some View {
+        Group {
+            if let viewId = viewId {
+                onPreferenceChange(SaveBoundsPrefKey.self) { preferences in
+                    DispatchQueue.main.async {
+                        let preference = preferences.first(where: { $0.viewId == viewId })
+                        if let preference {
+                            completion(preference.bounds)
+                        }
+                    }
+                }
+            } else {
+                self
             }
         }
+
     }
 
     public func saveSize(viewId: String?, coordinateSpace: CoordinateSpace = .local) -> some View {
