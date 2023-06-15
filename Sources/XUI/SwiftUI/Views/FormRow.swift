@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct _FormRow<Content: View>: View {
+public struct _VFormRow<Content: View>: View {
 
     private let title: String
     private let isEmpty: Bool
@@ -20,11 +20,9 @@ public struct _FormRow<Content: View>: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 2) {
             Text(.init(title))
-                .font(.subheadline)
-                .foregroundStyle(.tertiary)
-                .italic(!isEmpty)
+                .foregroundStyle(isEmpty ? .primary : .tertiary)
             content()
         }
     }

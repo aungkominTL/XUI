@@ -18,7 +18,6 @@ public struct AsyncButton<Label: View>: View {
     private var delay: Double = 0.2
     @State private var isDisabled = false
     @State private var showProgressView = false
-    @State private var errrorAlert: _Alert?
 
     public init(actionOptions: Set<ActionOption> = Set(ActionOption.allCases), action: @escaping (() async throws  -> Void), label: @escaping () -> Label, onFinish: (@MainActor () -> Void)? = nil, onError: (@MainActor (Error) -> Void)? = nil) {
         self.actionOptions = actionOptions
@@ -28,7 +27,6 @@ public struct AsyncButton<Label: View>: View {
         self.onError = onError
         self.isDisabled = isDisabled
         self.showProgressView = showProgressView
-        self.errrorAlert = errrorAlert
     }
 
     public var body: some View {
@@ -39,7 +37,6 @@ public struct AsyncButton<Label: View>: View {
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
                 }
-                
                 var progressViewTask: Task<Void, Error>?
                 if actionOptions.contains(.showProgressView) {
                     progressViewTask = Task { @MainActor in
@@ -54,13 +51,12 @@ public struct AsyncButton<Label: View>: View {
                     showProgressView = false
                     isDisabled = false
                     try await Task.sleep(for: .seconds(delay))
-                    handleFinish()
+                    onFinish?()
                 } catch {
                     progressViewTask?.cancel()
                     showProgressView = false
                     isDisabled = false
-                    try await Task.sleep(for: .seconds(delay))
-                    handleError(error)
+                    onError?(error)
                 }
             }
         } label: {
@@ -74,32 +70,6 @@ public struct AsyncButton<Label: View>: View {
         }
         .disabled(isDisabled)
         .buttonStyle(.borderless)
-        ._alert($errrorAlert)
-    }
-
-    @MainActor
-    private func handleError(_ error: Error) {
-        if let onError {
-            _Haptics.play(.rigid)
-            errrorAlert = .init(title: "Error", message: error.localizedDescription) {
-                _Haptics.play(.light)
-                onError(error)
-            }
-        }
-    }
-    @MainActor
-    private func handleFinish() {
-        if let onFinish {
-            if actionOptions.contains(.showFinishAlert) {
-                _Haptics.play(.rigid)
-                errrorAlert = .init(title: "Success") {
-                    _Haptics.play(.light)
-                    onFinish()
-                }
-            } else {
-                onFinish()
-            }
-        }
     }
 }
 
@@ -107,6 +77,5 @@ public extension AsyncButton {
     enum ActionOption: CaseIterable {
         case disableButton
         case showProgressView
-        case showFinishAlert
     }
 }

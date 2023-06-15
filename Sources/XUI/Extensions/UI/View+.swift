@@ -32,4 +32,18 @@ public extension View {
     func frame(square: CGFloat) -> some View {
         self.frame(width: square, height: square)
     }
+
+    func map(_ closure: (inout Self) -> Void) -> Self {
+        var copy = self
+        closure(&copy)
+        return copy
+    }
+}
+
+public extension View {
+    static var typeName: String { String(describing: self) }
+}
+
+public extension AnyView {
+    static var name: String { String(describing: self) }
 }

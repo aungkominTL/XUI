@@ -56,7 +56,6 @@ public struct PaginatedScrollView<Content: View>: View {
             ._flexible(.all)
         }
         .scrollIndicators(.hidden)
-        .scrollContentBackground(.hidden)
         .retrieveBounds(viewId: scrollAreaID) {
             didUpdateVisibleRect($0)
         }

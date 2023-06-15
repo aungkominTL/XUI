@@ -19,24 +19,28 @@ public struct _NumberTextField: View {
         self.delima = delima
     }
 
+    public var body: some View {
+        HStack {
+            Text(.init(title))
+                .foregroundStyle(value.wrappedValue > 0 ? .tertiary : .primary)
+
+            HStack(spacing: 0) {
+                if let delima {
+                    Text(delima)
+                        .foregroundStyle(value.wrappedValue > 0 ? .primary : .tertiary)
+                }
+                TextField("\(delima.str)0", text: .init(get: getValue, set: setValue(_:)), prompt: Text("0"))
+                    .keyboardType(.numberPad)
+            }
+        }
+    }
+
     private func getValue() -> String {
         if value.wrappedValue == 0 { return String() }
-        if let delima {
-            return "\(delima)\(value.wrappedValue)"
-        }
         return "\(value.wrappedValue)"
     }
 
     private func setValue(_ newValue: String) {
-        if let delima {
-            value.wrappedValue = Int(newValue.replace(delima, with: String())) ?? 0
-        } else {
-            value.wrappedValue = Int(newValue) ?? 0
-        }
-    }
-
-    public var body: some View {
-        TextField("Please input the \(title)", text: .init(get: getValue, set: setValue(_:)))
-            .keyboardType(.numberPad)
+        value.wrappedValue = Int(newValue) ?? 0
     }
 }

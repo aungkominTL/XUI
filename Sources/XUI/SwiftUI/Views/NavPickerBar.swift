@@ -35,6 +35,7 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
     public var body: some View {
         HStack {
             Text(.init(title))
+                .foregroundStyle(selection.wrappedValue.isEmpty ? .primary : .secondary)
             Spacer()
             Text(selection.wrappedValue.title)
                 .foregroundColor(.accentColor)

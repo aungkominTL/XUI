@@ -26,8 +26,8 @@ public struct _ConfirmButton<Content: View>: View {
         } label: {
             label()
         }
-        .confirmationDialog("Confirmation", isPresented: $isShown, actions: {
-            Button(role: .destructive, action: onConfirm) {
+        .confirmationDialog("Attention", isPresented: $isShown, actions: {
+            Button(role: .none, action: onConfirm) {
                 Text("Continue \(message)")
             }
         }, message: {

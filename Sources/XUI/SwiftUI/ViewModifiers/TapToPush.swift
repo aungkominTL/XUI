@@ -16,7 +16,7 @@ private struct PushViewModifier<Destination: View>: ViewModifier {
         } label: {
             content
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.borderless)
     }
 }
 

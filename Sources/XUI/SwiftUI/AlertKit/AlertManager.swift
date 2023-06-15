@@ -23,6 +23,12 @@ public class AlertManager: ObservableObject {
     @MainActor public func showActionSheet(_ sheet: ActionSheetItem.DefaultActionSheet) {
         actionSheetItem = ActionSheetItem(defaultActionSheet: sheet)
     }
+    @MainActor public func show(_ error: Error, _ action: @escaping () -> Void) {
+        self.show(dismiss: .error(message: error.localizedDescription, dismissButton: .cancel(action)))
+    }
+    @MainActor public func showActionSheet(_ error: Error, _ action: @escaping () -> Void) {
+        self.showActionSheet(.custom(title: "Error", message: error.localizedDescription, buttons: [.cancel(action)]))
+    }
 }
 
 extension View {
