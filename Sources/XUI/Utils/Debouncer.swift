@@ -13,15 +13,18 @@ public class Debouncer: ObservableObject {
     @Published private var counter = 0
     private var cancellables = Set<AnyCancellable>()
     public var onUpdate: (() -> Void) = {}
+    private let queue = DispatchQueue(label: "com.jonahaung.debouncer")
 
     public init() {
         $counter
             .removeDuplicates()
-            .debounce(for: 0.2, scheduler: RunLoop.main)
+            .debounce(for: 0.2, scheduler: queue)
             .sink { [weak self] value in
                 guard let self else { return }
                 if value == 0 {
-                    self.onUpdate()
+                    DispatchQueue.safeAsync {
+                        self.onUpdate()
+                    }
                 } else {
                     self.deQueue()
                 }
@@ -38,3 +41,4 @@ public class Debouncer: ObservableObject {
         print("deque")
     }
 }
+

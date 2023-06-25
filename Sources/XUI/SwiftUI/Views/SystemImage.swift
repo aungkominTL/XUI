@@ -9,7 +9,7 @@ import SwiftUI
 
 public enum SystemImageName: String, CaseIterable, Identifiable, Hashable {
     public var id: String { self.rawValue }
-    case phone, message, envelope, calendar, eye, mappin, tram, heart, house, dollarsign, magnifyingglass, bookmark, map, toilet, washer, dishwasher, refrigerator, bus, tv, parkingsign, cross, cat, dog, seal, cart, storefront, pin, wifi, pumpup, info, exclamationmark, at, microwave, circle
+    case phone, message, envelope, calendar, eye, mappin, tram, heart, house, dollarsign, magnifyingglass, bookmark, map, toilet, washer, dishwasher, refrigerator, bus, tv, parkingsign, cross, cat, dog, seal, cart, storefront, pin, wifi, pumpup, info, exclamationmark, at, microwave, circle, checkmark
     case building_2_crop_cricle = "building.2.crop.circle"
     case bed_double_circle = "bed.double.circle"
     case hand_thumbsup = "hand.thumbsup"
@@ -33,24 +33,29 @@ public enum SystemImageName: String, CaseIterable, Identifiable, Hashable {
 
 public struct SystemImage: View {
 
-    private let imageName: SystemImageName
+    private let imageName: String
     private let size: CGFloat?
     private var isRandomColor = false
 
     public init(_ imageName: SystemImageName, _ size: CGFloat? = nil) {
-        self.imageName = imageName
+        self.imageName = imageName.rawValue
+        self.size = size
+    }
+
+    public init(_ icon: String, _ size: CGFloat? = nil) {
+        self.imageName = icon
         self.size = size
     }
 
     public var body: some View {
-        Image(systemName: imageName.rawValue)
+        Image(systemName: imageName)
             .if_let(size) { value, view in
                 view
                     .resizable()
                     .frame(square: value)
             }
             .if(isRandomColor) { view in
-                view.foregroundColor(.random(seed: imageName.rawValue+imageName.rawValue))
+                view.foregroundColor(.random(seed: Array(repeating: imageName, count: 2).joined()))
             }
     }
 

@@ -5,7 +5,7 @@
 //  Created by Aung Ko Min on 10/6/23.
 //
 
-import Foundation
+import SwiftUI
 
 // Optional
 public extension Optional {
@@ -22,8 +22,21 @@ public extension Optional where Wrapped: Collection {
         return self?.isEmpty ?? true
     }
 }
+
 public extension Optional where Wrapped == String {
     var str: String {
         return self ?? ""
+    }
+
+    var bindable: Binding<String> {
+        if var self {
+            return .init {
+                self
+            } set: { newValue in
+                self = newValue
+            }
+        } else {
+            return .constant("")
+        }
     }
 }

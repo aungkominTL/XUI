@@ -12,7 +12,7 @@ public protocol _PickableItem {
 }
 
 extension _PickableItem {
-    var isEmpty: Bool { title.isWhitespace }
+    var isEmpty: Bool { title.isWhitespace || title == "Any" }
 }
 
 extension String: _PickableItem {
@@ -22,11 +22,12 @@ extension String: _PickableItem {
 }
 
 public struct _NavPickerBar<Item: _PickableItem>: View {
+
     private let title: String
     private let items: [Item]
     private var selection: Binding<Item>
 
-    public init(_ _title: String = "", _ _items: [Item], _ _selection: Binding<Item>) {
+    public init(_ _title: String = "Picker", _ _items: [Item], _ _selection: Binding<Item>) {
         title = _title
         items = _items
         selection = _selection
@@ -53,15 +54,16 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
 }
 
 private struct XPickerView<Item: _PickableItem>: View {
+
     let title: String
     let items: [Item]
     @Binding var pickedItem: Item
     @State private var searchText = ""
+    @Environment(\.dismiss) private var dismiss
 
     private var currentItems: [Item] {
         searchText.isEmpty ? items : items.filter{ $0.title.lowercased().contains(searchText.lowercased())}
     }
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollViewReader { scrollView in
@@ -69,24 +71,24 @@ private struct XPickerView<Item: _PickableItem>: View {
                 Section {
                     ForEach(currentItems, id: \.title) { item in
                         if !item.isEmpty {
-                            AsyncButton(actionOptions: [.disableButton]) {
-                                update(item)
-                            } label: {
-                                HStack {
-                                    Text(item.title)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    if item.title == pickedItem.title {
-                                        Image(systemName: "circle.fill")
-                                            .imageScale(.small)
+                            HStack {
+                                let isSelected = item.title == pickedItem.title
+
+                                SystemImage(isSelected ? .checkmark : .circle)
+                                    .symbolVariant(isSelected ? .circle.fill : .none)
+                                    .foregroundColor(isSelected ? .accentColor : Color(uiColor: .quaternaryLabel))
+                                    .imageScale(.large)
+
+                                AsyncButton(actionOptions: [.disableButton]) {
+                                    update(item)
+                                } label: {
+                                    HStack {
+                                        Text(item.title)
+                                            .foregroundColor(.primary)
+                                        Spacer()
                                     }
                                 }
-                            } onFinish: {
-                                if !pickedItem.title.isWhitespace {
-                                    dismiss()
-                                }
                             }
-                            .id(item.title)
                         }
                     }
                 } footer: {
@@ -96,18 +98,24 @@ private struct XPickerView<Item: _PickableItem>: View {
             ._onAppear(after: 0.5) {
                 scrollToSelectedItem(scrollView)
             }
-            .navigationBarTitle(title, displayMode: .inline)
-            .navigationBarItems(trailing: trailingItem)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "search \(title)")
+            .navigationBarBackButtonHidden()
+            .navigationBarTitle(title, displayMode: .large)
+            .navigationBarItems(leading: leadingItem, trailing: trailingItem)
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
+        }
+    }
+
+    private var leadingItem: some View {
+        Button("Close") {
+            dismiss()
         }
     }
 
     private var trailingItem: some View {
         Button("Clear") {
             clearItem()
-            dismiss()
         }
-        .disabled(pickedItem.title.isWhitespace)
+        .disabled(pickedItem.isEmpty)
     }
 
     private func scrollToSelectedItem(_ scrollView: ScrollViewProxy) {
@@ -118,17 +126,20 @@ private struct XPickerView<Item: _PickableItem>: View {
         }
     }
     private func clearItem() {
-        let empty = items.filter { $0.title.isWhitespace }.first
+        let empty = items.filter { $0.isEmpty }.first
         if let empty {
             pickedItem = empty
         }
     }
+
     @MainActor private func update(_ item: Item) {
         if pickedItem.title == item.title {
             clearItem()
             return
         }
         pickedItem = item
-        dismiss()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            dismiss()
+        }
     }
 }

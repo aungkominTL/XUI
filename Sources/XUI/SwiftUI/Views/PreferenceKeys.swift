@@ -69,7 +69,6 @@ extension View {
                 self
             }
         }
-
     }
 
     public func saveSize(viewId: String?, coordinateSpace: CoordinateSpace = .local) -> some View {

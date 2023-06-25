@@ -29,8 +29,9 @@ public struct _NumberTextField: View {
                     Text(delima)
                         .foregroundStyle(value.wrappedValue > 0 ? .primary : .tertiary)
                 }
-                TextField("\(delima.str)0", text: .init(get: getValue, set: setValue(_:)), prompt: Text("0"))
+                TextField("\(delima.str)", text: .init(get: getValue, set: setValue(_:)), prompt: Text(""))
                     .keyboardType(.numberPad)
+                    .monospacedDigit()
             }
         }
     }
