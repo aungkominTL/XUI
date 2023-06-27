@@ -11,15 +11,15 @@ public struct AsyncButton<Label: View>: View {
 
     var actionOptions = Set(ActionOption.allCases)
     let action: (() async throws  -> Void)
-    var onFinish: (@MainActor () -> Void)?
-    var onError: (@MainActor (Error) -> Void)?
+    var onFinish: (() -> Void)?
+    var onError: ((Error) -> Void)?
     @ViewBuilder var label: () -> Label
 
     private var delay: Double = 0.2
     @State private var isDisabled = false
     @State private var showProgressView = false
 
-    public init(actionOptions: Set<ActionOption> = Set(ActionOption.allCases), action: @escaping (() async throws  -> Void), label: @escaping () -> Label, onFinish: (@MainActor () -> Void)? = nil, onError: (@MainActor (Error) -> Void)? = nil) {
+    public init(actionOptions: Set<ActionOption> = [.disableButton], action: @escaping (() async throws  -> Void), label: @escaping () -> Label, onFinish: (@MainActor () -> Void)? = nil, onError: (@MainActor (Error) -> Void)? = nil) {
         self.actionOptions = actionOptions
         self.action = action
         self.label = label
@@ -31,9 +31,8 @@ public struct AsyncButton<Label: View>: View {
 
     public var body: some View {
         Button {
-            Task { @MainActor in
-                _Haptics.play(.soft)
-
+            Task {
+                _Haptics.play(.light)
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
                 }
@@ -60,16 +59,15 @@ public struct AsyncButton<Label: View>: View {
                 }
             }
         } label: {
-            ZStack {
-                label()
-                    .opacity(showProgressView ? 0 : 1)
-                if showProgressView {
-                    ProgressView()
+            label()
+//                .opacity(showProgressView ? 0.1 : 1)
+                .overlay {
+                    if showProgressView {
+                        LoadingIndicator(size: 25)
+                    }
                 }
-            }
         }
         .disabled(isDisabled)
-        .buttonStyle(.borderless)
     }
 }
 

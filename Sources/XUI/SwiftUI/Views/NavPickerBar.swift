@@ -73,7 +73,6 @@ private struct XPickerView<Item: _PickableItem>: View {
                         if !item.isEmpty {
                             HStack {
                                 let isSelected = item.title == pickedItem.title
-
                                 SystemImage(isSelected ? .checkmark : .circle)
                                     .symbolVariant(isSelected ? .circle.fill : .none)
                                     .foregroundColor(isSelected ? .accentColor : Color(uiColor: .quaternaryLabel))

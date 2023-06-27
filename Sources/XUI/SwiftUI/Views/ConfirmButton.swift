@@ -21,7 +21,8 @@ public struct _ConfirmButton<Content: View>: View {
     @State private var isShown = false
 
     public var body: some View {
-        Button {
+        AsyncButton {
+            try await Task.sleep(for: .seconds(0.5))
             isShown = true
         } label: {
             label()
@@ -29,6 +30,11 @@ public struct _ConfirmButton<Content: View>: View {
         .confirmationDialog("Attention", isPresented: $isShown, actions: {
             Button(role: .none, action: onConfirm) {
                 Text("Continue \(message)")
+            }
+            Button(role: .cancel) {
+
+            } label: {
+                Text("Cancel")
             }
         }, message: {
             Text("Comfirm to \(message)?")

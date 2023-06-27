@@ -38,9 +38,11 @@ public struct _IconLabel: View {
         self.icon = icon
         self.title = title
     }
+
     public init(_ systemImageName: SystemImageName, _ title: String, spacing: CGFloat = 2) {
         self.init(icon: systemImageName.rawValue, title, spacing: spacing)
     }
+
     public var body: some View {
         _Label(spacing: spacing) {
             Image(systemName: icon)

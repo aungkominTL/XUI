@@ -11,12 +11,12 @@ private struct PushViewModifier<Destination: View>: ViewModifier {
     
     @ViewBuilder var destination: (() -> Destination)
     func body(content: Content) -> some View {
+        
         NavigationLink {
             destination()
         } label: {
             content
         }
-        .buttonStyle(.borderless)
     }
 }
 

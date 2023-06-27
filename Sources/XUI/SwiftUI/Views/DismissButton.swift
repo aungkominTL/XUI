@@ -11,18 +11,18 @@ public struct _DismissButton: View {
 
     private let isProtected: Bool
     private let title: String
+    @Environment(\.presentationMode) private var presentationMode
 
-    public init(isProtected: Bool = false, title: String = "Cancel") {
+    public init(isProtected: Bool = false, title: String = "Close") {
         self.isProtected = isProtected
         self.title = title
     }
-    @Environment(\.presentationMode) private var presentationMode
 
     public var body: some View {
         if isProtected {
             Text(.init(title))
-                ._comfirmationDialouge(message: "You have unsaved changes. Are you sure you want to quit?") {
-                    Button("Discard & Quit", role: .destructive) {
+                ._comfirmationDialouge(message: "Are you sure to close?") {
+                    Button("Continue to close", role: .destructive) {
                         presentationMode.wrappedValue.dismiss()
                     }
                 }

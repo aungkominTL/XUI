@@ -12,11 +12,11 @@ private struct BorderedProminentButtonStyle: ViewModifier {
         ZStack {
             RoundedRectangle(cornerRadius: 6)
                 .fill(Color.accentColor)
+                .frame(height: 40)
             content
-                .foregroundColor(Color(uiColor: .tertiarySystemBackground))
+                .foregroundColor(.white)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 40)
+        ._flexible(.horizontal)
     }
 }
 
@@ -31,10 +31,10 @@ private struct BorderedProminentLightButtonStyle: ViewModifier {
         ZStack {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.accentColor, lineWidth: 1)
+                .frame(height: 40)
             content
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 40)
+        ._flexible(.horizontal)
     }
 }
 
