@@ -8,6 +8,7 @@
 import SwiftUI
 
 private struct SplashReductView: ViewModifier {
+    
     private let timeout: TimeInterval
     @State private var isActive = true
 
@@ -17,12 +18,11 @@ private struct SplashReductView: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .redacted(reason: isActive ? .placeholder : [])
+            .redacted(reason: isActive ? .privacy : [])
+            .animation(.interactiveSpring(), value: isActive == true)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                    withAnimation {
-                        self.isActive = false
-                    }
+                    self.isActive = false
                 }
             }
             .onDisappear {
@@ -32,7 +32,7 @@ private struct SplashReductView: ViewModifier {
 }
 
 public extension View {
-    func _splashReduct(for timeout: TimeInterval = 0.5) -> some View {
+    func _splashReduct(for timeout: TimeInterval = 0.3) -> some View {
         modifier(SplashReductView(timeout: timeout))
     }
 }

@@ -39,14 +39,13 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
                 .foregroundStyle(selection.wrappedValue.isEmpty ? .primary : .secondary)
             Spacer()
             Text(selection.wrappedValue.title)
-                .foregroundColor(.accentColor)
         }
         .padding(.trailing)
         .overlay {
             NavigationLink {
                 XPickerView(title: title, items: items, pickedItem: selection)
             } label: {
-                Color.clear
+               EmptyView()
             }
             .buttonStyle(.plain)
         }
@@ -73,8 +72,7 @@ private struct XPickerView<Item: _PickableItem>: View {
                         if !item.isEmpty {
                             HStack {
                                 let isSelected = item.title == pickedItem.title
-                                SystemImage(isSelected ? .checkmark : .circle)
-                                    .symbolVariant(isSelected ? .circle.fill : .none)
+                                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                                     .foregroundColor(isSelected ? .accentColor : Color(uiColor: .quaternaryLabel))
                                     .imageScale(.large)
 

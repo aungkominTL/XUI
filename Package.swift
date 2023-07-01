@@ -8,15 +8,12 @@ let package = Package(
     platforms: [.iOS(.v16)],
     products: [
         .library(name: "XUI", targets: ["XUI"]),
-        .library(name: "SFSafeSymbols", targets: ["XUI"])
     ],
     dependencies: [
-        .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", .upToNextMajor(from: "4.1.1"))
+        .package(name: "SFSafeSymbols", url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "4.1.1")
     ],
     targets: [
-        .target(
-            name: "XUI",
-            dependencies: []),
+        .target(name: "XUI", dependencies: [.product(name: "SFSafeSymbols", package: "SFSafeSymbols")]),
         .testTarget(
             name: "XUITests",
             dependencies: ["XUI"]),

@@ -14,11 +14,10 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     
     public func body(content: Content) -> some View {
-        AsyncButton(actionOptions: []) {
+        AsyncButton(actionOptions: [.disableButton]) {
             isShown = true
         } label: {
             content
-                ._flexible(.trailing)
         }
         .sheet(isPresented: $isShown) {
             destination()
@@ -35,11 +34,10 @@ private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
 
     public func body(content: Content) -> some View {
-        AsyncButton(actionOptions: []) {
+        AsyncButton(actionOptions: [.disableButton]) {
             isShown = true
         } label: {
             content
-                ._flexible(.trailing)
         }
         .fullScreenCover(isPresented: $isShown) {
             destination()

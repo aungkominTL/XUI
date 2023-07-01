@@ -1,0 +1,511 @@
+/**
+*  SwiftUIMasonry
+*  Copyright (c) Ciaran O'Brien 2022
+*  MIT license, see LICENSE file for details
+*/
+
+import SwiftUI
+
+public struct WaterfallList<Data, ID, Content>: View
+where Data : RandomAccessCollection,
+      ID : Hashable,
+      Content : View
+{
+    public var body: some View {
+        GeometryReader { geometry in
+            WaterfallLayout(axis: axis,
+                          content: content,
+                          data: data,
+                          horizontalSpacing: max(horizontalSpacing ?? 8, 0),
+                          id: id,
+                          itemContent: itemContent,
+                          lines: lines,
+                          lineSpan: lineSpan,
+                          size: geometry.size,
+                          verticalSpacing: max(verticalSpacing ?? 8, 0))
+            .transaction {
+                updateTransaction($0)
+            }
+            .background(
+                GeometryReader { geometry in
+                    Color.clear
+                        .onAppear { contentSize = geometry.size }
+                        .onChange(of: geometry.size) { newValue in
+                            DispatchQueue.main.async {
+                                withTransaction(transaction) {
+                                    contentSize = newValue
+                                }
+                            }
+                        }
+                }
+                .hidden()
+            )
+        }
+        .frame(width: axis == .horizontal ? contentSize.width : nil,
+               height: axis == .vertical ? contentSize.height : nil)
+    }
+    
+    @State private var contentSize = CGSize.zero
+    @State private var transaction = Transaction()
+    
+    private var axis: Axis
+    private var content: (() -> Content)?
+    private var data: Data?
+    private var horizontalSpacing: CGFloat?
+    private var id: KeyPath<Data.Element, ID>?
+    private var itemContent: ((Data.Element) -> Content)?
+    private var lines: WaterfallLines
+    private var lineSpan: ((Data.Element) -> WaterfallLines)?
+    private var verticalSpacing: CGFloat?
+}
+
+
+public extension WaterfallList
+where Data == [Never],
+      ID == Never
+{
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - content: A view builder that creates the content of this masonry.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         spacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content)
+    {
+        self.axis = axis
+        self.content = content
+        self.data = nil
+        self.horizontalSpacing = spacing
+        self.id = nil
+        self.itemContent = nil
+        self.lines = lines
+        self.lineSpan = nil
+        self.verticalSpacing = spacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - content: A view builder that creates the content of this masonry.
+    init(_ axis: Axis,
+         lines: Int,
+         spacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content)
+    {
+        self.axis = axis
+        self.content = content
+        self.data = nil
+        self.horizontalSpacing = spacing
+        self.id = nil
+        self.itemContent = nil
+        self.lines = .fixed(lines)
+        self.lineSpan = nil
+        self.verticalSpacing = spacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - content: A view builder that creates the content of this masonry.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content)
+    {
+        self.axis = axis
+        self.content = content
+        self.data = nil
+        self.horizontalSpacing = horizontalSpacing
+        self.id = nil
+        self.itemContent = nil
+        self.lines = lines
+        self.lineSpan = nil
+        self.verticalSpacing = verticalSpacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - content: A view builder that creates the content of this masonry.
+    init(_ axis: Axis,
+         lines: Int,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content)
+    {
+        self.axis = axis
+        self.content = content
+        self.data = nil
+        self.horizontalSpacing = horizontalSpacing
+        self.id = nil
+        self.itemContent = nil
+        self.lines = .fixed(lines)
+        self.lineSpan = nil
+        self.verticalSpacing = verticalSpacing
+    }
+}
+
+
+public extension WaterfallList {
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - data: The data that the masonry uses to create views dynamically.
+    ///   - id: The key path to the provided data's identifier.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         spacing: CGFloat? = nil,
+         data: Data,
+         id: KeyPath<Data.Element, ID>,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> WaterfallLines)? = nil)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = spacing
+        self.id = id
+        self.itemContent = content
+        self.lines = lines
+        self.lineSpan = lineSpan
+        self.verticalSpacing = spacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - data: The data that the masonry uses to create views dynamically.
+    ///   - id: The key path to the provided data's identifier.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         spacing: CGFloat? = nil,
+         data: Data,
+         id: KeyPath<Data.Element, ID>,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> Int)?)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = spacing
+        self.id = id
+        self.itemContent = content
+        self.lines = lines
+        self.verticalSpacing = spacing
+        
+        if let lineSpan = lineSpan {
+            self.lineSpan = { .fixed(lineSpan($0)) }
+        } else {
+            self.lineSpan = nil
+        }
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - data: The data that the masonry uses to create views dynamically.
+    ///   - id: The key path to the provided data's identifier.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         data: Data,
+         id: KeyPath<Data.Element, ID>,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> WaterfallLines)? = nil)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = horizontalSpacing
+        self.id = id
+        self.itemContent = content
+        self.lines = lines
+        self.lineSpan = lineSpan
+        self.verticalSpacing = verticalSpacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - data: The data that the masonry uses to create views dynamically.
+    ///   - id: The key path to the provided data's identifier.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         data: Data,
+         id: KeyPath<Data.Element, ID>,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> Int)?)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = horizontalSpacing
+        self.id = id
+        self.itemContent = content
+        self.lines = lines
+        self.verticalSpacing = verticalSpacing
+        
+        if let lineSpan = lineSpan {
+            self.lineSpan = { .fixed(lineSpan($0)) }
+        } else {
+            self.lineSpan = nil
+        }
+    }
+}
+
+
+public extension WaterfallList
+where Data.Element : Identifiable,
+      Data.Element.ID == ID
+{
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - data: The identified data that the masonry uses to create views
+    ///     dynamically.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         spacing: CGFloat? = nil,
+         data: Data,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> WaterfallLines)? = nil)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = spacing
+        self.id = \.id
+        self.itemContent = content
+        self.lines = lines
+        self.lineSpan = lineSpan
+        self.verticalSpacing = spacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - spacing: The distance between adjacent subviews, or `nil` if you
+    ///     want the masonry to choose a default distance for each pair of
+    ///     subviews.
+    ///   - data: The identified data that the masonry uses to create views
+    ///     dynamically.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         spacing: CGFloat? = nil,
+         data: Data,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> Int)?)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = spacing
+        self.id = \.id
+        self.itemContent = content
+        self.lines = lines
+        self.verticalSpacing = spacing
+        
+        if let lineSpan = lineSpan {
+            self.lineSpan = { .fixed(lineSpan($0)) }
+        } else {
+            self.lineSpan = nil
+        }
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - data: The identified data that the masonry uses to create views
+    ///     dynamically.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         data: Data,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> WaterfallLines)? = nil)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = horizontalSpacing
+        self.id = \.id
+        self.itemContent = content
+        self.lines = lines
+        self.lineSpan = lineSpan
+        self.verticalSpacing = verticalSpacing
+    }
+    
+    /// A view that arranges its children in a masonry.
+    ///
+    /// This view returns a flexible preferred size, orthogonal to the layout axis, to its parent layout.
+    ///
+    /// - Parameters:
+    ///   - axis: The layout axis of this masonry.
+    ///   - lines: The number of lines in the masonry.
+    ///   - horizontalSpacing: The distance between horizontally adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - verticalSpacing: The distance between vertically adjacent
+    ///     subviews, or `nil` if you want the masonry to choose a default distance
+    ///     for each pair of subviews.
+    ///   - data: The identified data that the masonry uses to create views
+    ///     dynamically.
+    ///   - content: A view builder that creates the content of this masonry.
+    ///   - lineSpan: The number of lines the content for a given element will
+    ///     span.
+    init(_ axis: Axis,
+         lines: WaterfallLines,
+         horizontalSpacing: CGFloat? = nil,
+         verticalSpacing: CGFloat? = nil,
+         data: Data,
+         @ViewBuilder content: @escaping (Data.Element) -> Content,
+         lineSpan: ((Data.Element) -> Int)?)
+    {
+        self.axis = axis
+        self.content = nil
+        self.data = data
+        self.horizontalSpacing = horizontalSpacing
+        self.id = \.id
+        self.itemContent = content
+        self.lines = lines
+        self.verticalSpacing = verticalSpacing
+        
+        if let lineSpan = lineSpan {
+            self.lineSpan = { .fixed(lineSpan($0)) }
+        } else {
+            self.lineSpan = nil
+        }
+    }
+}
+
+
+private extension WaterfallList {
+    func updateTransaction(_ newValue: Transaction) {
+        if transaction.animation != newValue.animation
+            || transaction.disablesAnimations != newValue.disablesAnimations
+            || transaction.isContinuous != newValue.isContinuous
+        {
+            DispatchQueue.main.async {
+                transaction = newValue
+            }
+        }
+    }
+}

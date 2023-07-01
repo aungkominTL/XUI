@@ -9,17 +9,19 @@ import SwiftUI
 
 public struct AsyncButton<Label: View>: View {
 
+    public typealias AsyncAction = (@MainActor @Sendable() async throws -> Void)
     var actionOptions = Set(ActionOption.allCases)
-    let action: (() async throws  -> Void)
-    var onFinish: (() -> Void)?
+    let action: AsyncAction
+    var onFinish: AsyncAction?
     var onError: ((Error) -> Void)?
+
     @ViewBuilder var label: () -> Label
 
     private var delay: Double = 0.2
     @State private var isDisabled = false
     @State private var showProgressView = false
 
-    public init(actionOptions: Set<ActionOption> = [.disableButton], action: @escaping (() async throws  -> Void), label: @escaping () -> Label, onFinish: (@MainActor () -> Void)? = nil, onError: (@MainActor (Error) -> Void)? = nil) {
+    public init(actionOptions: Set<ActionOption> = [.disableButton], action: @escaping AsyncAction, label: @escaping () -> Label, onFinish: AsyncAction? = nil, onError: ((Error) -> Void)? = nil) {
         self.actionOptions = actionOptions
         self.action = action
         self.label = label
@@ -50,7 +52,7 @@ public struct AsyncButton<Label: View>: View {
                     showProgressView = false
                     isDisabled = false
                     try await Task.sleep(for: .seconds(delay))
-                    onFinish?()
+                    try await onFinish?()
                 } catch {
                     progressViewTask?.cancel()
                     showProgressView = false
@@ -60,7 +62,7 @@ public struct AsyncButton<Label: View>: View {
             }
         } label: {
             label()
-//                .opacity(showProgressView ? 0.1 : 1)
+                .opacity(showProgressView ? 0.1 : 1)
                 .overlay {
                     if showProgressView {
                         LoadingIndicator(size: 25)
