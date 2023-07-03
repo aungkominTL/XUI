@@ -8,22 +8,24 @@
 import SwiftUI
 
 private struct XDialogModifier<DialogContent: View>: ViewModifier {
+    
     let title: String
     let message: String
     @ViewBuilder var dialogContent: (() -> DialogContent)
     @State private var isShown = false
 
     public func body(content: Content) -> some View {
-        Button {
+        AsyncButton {
+            try await Task.sleep(for: .seconds(0.5))
             isShown = true
         } label: {
             content
-                .confirmationDialog(title, isPresented: $isShown) {
-                    dialogContent()
-                } message: {
-                    Text(message)
-                }
         }
+        .confirmationDialog(title, isPresented: $isShown, titleVisibility: .visible, actions: {
+            dialogContent()
+        }, message: {
+            Text(.init(message))
+        })
     }
 }
 

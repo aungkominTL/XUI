@@ -10,10 +10,17 @@ let package = Package(
         .library(name: "XUI", targets: ["XUI"]),
     ],
     dependencies: [
-        .package(name: "SFSafeSymbols", url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "4.1.1")
+        .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "4.1.1"),
+        .package(url: "https://github.com/kean/Nuke.git", from: "12.1.2")
     ],
     targets: [
-        .target(name: "XUI", dependencies: [.product(name: "SFSafeSymbols", package: "SFSafeSymbols")]),
+        .target(
+            name: "XUI",
+            dependencies: [
+                "SFSafeSymbols", .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
+                "Nuke", .product(name: "NukeUI", package: "Nuke")
+            ]
+        ),
         .testTarget(
             name: "XUITests",
             dependencies: ["XUI"]),

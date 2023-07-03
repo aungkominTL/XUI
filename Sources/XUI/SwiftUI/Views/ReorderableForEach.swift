@@ -61,10 +61,8 @@ public struct ReorderableForEach<Data, Content>: View where Data : Hashable, Con
             }
             hasChangedLocation = true
             if data[to] != current {
-                withAnimation {
-                    data.move(fromOffsets: IndexSet(integer: from),
-                              toOffset: (to > from) ? to + 1 : to)
-                }
+                data.move(fromOffsets: IndexSet(integer: from),
+                          toOffset: (to > from) ? to + 1 : to)
             }
             _Haptics.play(.light)
         }

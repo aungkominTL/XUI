@@ -17,7 +17,7 @@ public extension View {
         }
     }
 
-    @ViewBuilder func if_let <Content: View, T: Hashable>(_ optional: T?, _ transform: (T, Self) -> Content) -> some View {
+    @ViewBuilder func if_let <Content: View, T>(_ optional: T?, _ transform: (T, Self) -> Content) -> some View {
         if let optional {
             transform(optional, self)
         } else {

@@ -12,7 +12,7 @@ private struct XBadgedModifier: ViewModifier {
     func body(content: Content) -> some View {
         HStack(alignment: .bottom, spacing: 4) {
             content
-            Text(string)
+            Text(.init(string))
                 .font(.footnote)
                 .italic()
                 .foregroundStyle(.secondary)

@@ -11,18 +11,17 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
 
     @ViewBuilder var destination: (() -> Destination)
     @State private var isShown = false
-    @Environment(\.colorScheme) private var colorScheme
     
     public func body(content: Content) -> some View {
         AsyncButton(actionOptions: [.disableButton]) {
+            try await Task.sleep(for: .seconds(0.2))
             isShown = true
         } label: {
             content
         }
         .sheet(isPresented: $isShown) {
             destination()
-                .colorScheme(colorScheme)
-                .accentColor(.accentColor)
+                .xThemeStyle()
         }
     }
 }
@@ -31,18 +30,17 @@ private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
 
     @ViewBuilder var destination: (() -> Destination)
     @State private var isShown = false
-    @Environment(\.colorScheme) private var colorScheme
 
     public func body(content: Content) -> some View {
         AsyncButton(actionOptions: [.disableButton]) {
+            try await Task.sleep(for: .seconds(0.2))
             isShown = true
         } label: {
             content
         }
         .fullScreenCover(isPresented: $isShown) {
             destination()
-                .colorScheme(colorScheme)
-                .accentColor(.accentColor)
+                .xThemeStyle()
         }
     }
 }

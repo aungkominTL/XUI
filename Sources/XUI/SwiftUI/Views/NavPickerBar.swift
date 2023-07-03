@@ -22,17 +22,17 @@ extension String: _PickableItem {
 }
 
 public struct _NavPickerBar<Item: _PickableItem>: View {
-
+    
     private let title: String
     private let items: [Item]
     private var selection: Binding<Item>
-
+    
     public init(_ _title: String = "Picker", _ _items: [Item], _ _selection: Binding<Item>) {
         title = _title
         items = _items
         selection = _selection
     }
-
+    
     public var body: some View {
         HStack {
             Text(.init(title))
@@ -45,7 +45,7 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
             NavigationLink {
                 XPickerView(title: title, items: items, pickedItem: selection)
             } label: {
-               EmptyView()
+                EmptyView()
             }
             .buttonStyle(.plain)
         }
@@ -53,17 +53,16 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
 }
 
 private struct XPickerView<Item: _PickableItem>: View {
-
+    
     let title: String
     let items: [Item]
     @Binding var pickedItem: Item
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
-
     private var currentItems: [Item] {
         searchText.isEmpty ? items : items.filter{ $0.title.lowercased().contains(searchText.lowercased())}
     }
-
+    
     var body: some View {
         ScrollViewReader { scrollView in
             List {
@@ -72,19 +71,24 @@ private struct XPickerView<Item: _PickableItem>: View {
                         if !item.isEmpty {
                             HStack {
                                 let isSelected = item.title == pickedItem.title
-                                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                    .foregroundColor(isSelected ? .accentColor : Color(uiColor: .quaternaryLabel))
+                                SystemImage(isSelected ? .checkmark : .circle)
+                                    .symbolVariant(isSelected ? .circle.fill : .none)
+                                    .foregroundColor(isSelected ? .green : Color(uiColor: .quaternaryLabel))
                                     .imageScale(.large)
-
+                                
                                 AsyncButton(actionOptions: [.disableButton]) {
                                     update(item)
+                                    try await Task.sleep(for: .seconds(0.2))
                                 } label: {
                                     HStack {
                                         Text(item.title)
                                             .foregroundColor(.primary)
                                         Spacer()
                                     }
+                                } onFinish: {
+                                    dismiss()
                                 }
+                                .buttonStyle(.borderless)
                             }
                         }
                     }
@@ -101,20 +105,18 @@ private struct XPickerView<Item: _PickableItem>: View {
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
         }
     }
-
+    
     private var leadingItem: some View {
-        Button("Close") {
-            dismiss()
-        }
-    }
-
-    private var trailingItem: some View {
         Button("Clear") {
             clearItem()
         }
         .disabled(pickedItem.isEmpty)
     }
-
+    
+    private var trailingItem: some View {
+        _DismissButton()
+    }
+    
     private func scrollToSelectedItem(_ scrollView: ScrollViewProxy) {
         if !pickedItem.isEmpty {
             withAnimation {
@@ -128,15 +130,13 @@ private struct XPickerView<Item: _PickableItem>: View {
             pickedItem = empty
         }
     }
-
+    
     @MainActor private func update(_ item: Item) {
         if pickedItem.title == item.title {
             clearItem()
             return
         }
         pickedItem = item
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            dismiss()
-        }
+        
     }
 }

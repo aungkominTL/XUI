@@ -10,7 +10,7 @@ import SwiftUI
 private struct HidableModifier: ViewModifier {
     @Binding var isHidden: Bool
     public func body(content: Content) -> some View {
-        isHidden ? nil : content
+        isHidden ? nil : content.transition(.scale.animation(.easeInOut(duration: 0.3)))
     }
 }
 
