@@ -39,7 +39,7 @@ private struct ZoomableScrollViewImpl<Content: View>: UIViewControllerRepresenta
     }
 
     func updateUIViewController(_ viewController: ZoomableScrollViewController, context: Context) {
-        //        viewController.update(content: content, doubleTap: doubleTap)
+        viewController.update(content: content, doubleTap: doubleTap)
     }
 
     // MARK: - Coordinator
@@ -114,7 +114,7 @@ extension ZoomableScrollViewImpl {
         }
 
         func update(content: Content, doubleTap: AnyPublisher<Void, Never>) {
-//            coordinator.hostingController.rootView = content
+            coordinator.hostingController.rootView = content
             scrollView.setNeedsUpdateConstraints()
             doubleTapCancellable = doubleTap.sink { [unowned self] in handleDoubleTap() }
         }

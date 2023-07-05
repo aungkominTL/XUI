@@ -17,7 +17,7 @@ let package = Package(
         .target(
             name: "XUI",
             dependencies: [
-                "SFSafeSymbols", .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
+                .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
                 "Nuke", .product(name: "NukeUI", package: "Nuke")
             ]
         ),
