@@ -17,7 +17,7 @@ private struct XThemeStyleModifier: ViewModifier {
         content
             .xListStyle()
             .xFontDesign()
-            .tint(Color(hex: accentColor) ?? nil)
+            .accentColor(Color(hex: accentColor) ?? nil)
             .colorScheme(style.colorScheme ?? colorScheme)
     }
 }

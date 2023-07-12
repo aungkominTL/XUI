@@ -32,7 +32,7 @@ public struct SystemImage: View {
             }
             .if (isRandomColor) { view in
                 view
-                    .foregroundColor(.random(seed: Array(repeating: systemName, count: 2).joined()))
+                    .foregroundColor(.random(seed: systemName + "com.jonahaung.homeforyou"))
             }
             .scaledToFit()
     }

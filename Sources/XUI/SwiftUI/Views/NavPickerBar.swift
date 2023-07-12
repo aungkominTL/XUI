@@ -75,6 +75,7 @@ private struct XPickerView<Item: _PickableItem>: View {
                                     .symbolVariant(isSelected ? .circle.fill : .none)
                                     .foregroundColor(isSelected ? .green : Color(uiColor: .quaternaryLabel))
                                     .imageScale(.large)
+                                    .padding(.trailing, 3)
                                 
                                 AsyncButton(actionOptions: [.disableButton]) {
                                     update(item)
@@ -99,22 +100,17 @@ private struct XPickerView<Item: _PickableItem>: View {
             ._onAppear(after: 0.5) {
                 scrollToSelectedItem(scrollView)
             }
-            .navigationBarBackButtonHidden()
             .navigationBarTitle(title, displayMode: .large)
-            .navigationBarItems(leading: leadingItem, trailing: trailingItem)
+            .navigationBarItems(trailing: trailingItem)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
         }
     }
     
-    private var leadingItem: some View {
+    private var trailingItem: some View {
         Button("Clear") {
             clearItem()
         }
         .disabled(pickedItem.isEmpty)
-    }
-    
-    private var trailingItem: some View {
-        _DismissButton()
     }
     
     private func scrollToSelectedItem(_ scrollView: ScrollViewProxy) {

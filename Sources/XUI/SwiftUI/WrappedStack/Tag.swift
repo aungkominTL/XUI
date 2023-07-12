@@ -8,23 +8,20 @@
 import SwiftUI
 
 public struct _Tag<Content>: View where Content: View {
-
+    
     private let content: () -> Content
-    private let fgcolor: Color
-    private let bgcolor: Color
-
-    public init(fgcolor: Color? = .init(uiColor: .systemBackground), bgcolor: Color? = .gray, @ViewBuilder content: @escaping () -> Content) {
+    private let color: Color
+    
+    public init(color: Color = .secondary, @ViewBuilder content: @escaping () -> Content) {
         self.content = content
-        self.fgcolor = fgcolor ?? .black
-        self.bgcolor = bgcolor ?? .gray
+        self.color = color
     }
-
+    
     public var body: some View {
         content()
-            .foregroundColor(fgcolor)
+            .font(.footnote)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(bgcolor)
-            .cornerRadius(8)
+            ._borderStyle(color.opacity(0.7), 1)
     }
 }

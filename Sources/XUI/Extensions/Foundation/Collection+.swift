@@ -22,12 +22,12 @@ public extension Collection where Indices.Iterator.Element == Index {
 }
 
 public extension Array {
-
+    
     mutating func shuffle() {
         if count == 0 {
             return
         }
-
+        
         for i in 0..<(count - 1) {
             let j = Int(arc4random_uniform(UInt32(count - i))) + i
             if j != i {
@@ -35,11 +35,11 @@ public extension Array {
             }
         }
     }
-
+    
     func shuffled() -> [Element] {
         var list = self
         list.shuffle()
-
+        
         return list
     }
     func random() -> Element? {
@@ -47,10 +47,10 @@ public extension Array {
     }
     func random(_ count: Int = 1) -> [Element] {
         let result = shuffled()
-
+        
         return (count > result.count) ? result : Array(result[0..<count])
     }
-
+    
     func removeDuplicates(by predicate: (Element, Element) -> Bool) -> Self {
         var result = [Element]()
         for value in self where result.filter({ predicate($0, value) }).isEmpty {
@@ -66,3 +66,8 @@ public extension Array {
     }
 }
 
+public extension Array {
+    func groupByKey<Key: Hashable>(keyPath: KeyPath<Element, Key>) -> [Key: [Element]] {
+        Dictionary(grouping: self, by: { $0[keyPath: keyPath] })
+    }
+}

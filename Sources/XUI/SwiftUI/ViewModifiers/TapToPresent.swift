@@ -14,11 +14,11 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
     
     public func body(content: Content) -> some View {
         AsyncButton(actionOptions: [.disableButton]) {
-            try await Task.sleep(for: .seconds(0.2))
             isShown = true
         } label: {
             content
         }
+        .buttonStyle(.borderless)
         .sheet(isPresented: $isShown) {
             destination()
                 .xThemeStyle()
@@ -33,11 +33,11 @@ private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
 
     public func body(content: Content) -> some View {
         AsyncButton(actionOptions: [.disableButton]) {
-            try await Task.sleep(for: .seconds(0.2))
             isShown = true
         } label: {
             content
         }
+        .buttonStyle(.borderless)
         .fullScreenCover(isPresented: $isShown) {
             destination()
                 .xThemeStyle()

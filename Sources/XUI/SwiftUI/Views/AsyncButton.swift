@@ -17,7 +17,7 @@ public struct AsyncButton<Label: View>: View {
 
     @ViewBuilder var label: () -> Label
 
-    private var delay: Double = 0.2
+    private var delay: Double = 0.1
     @State private var isDisabled = false
     @State private var showProgressView = false
 
@@ -34,7 +34,6 @@ public struct AsyncButton<Label: View>: View {
     public var body: some View {
         Button {
             Task {
-                _Haptics.play(.light)
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
                 }
@@ -44,15 +43,19 @@ public struct AsyncButton<Label: View>: View {
                         if Task.isCancelled { return }
                         showProgressView = true
                     }
-                    try await Task.sleep(for: .seconds(delay))
                 }
                 do {
+                    try await Task.sleep(for: .seconds(delay))
+                    if Task.isCancelled { return }
                     try await action()
+                    _Haptics.play(.soft)
                     progressViewTask?.cancel()
                     showProgressView = false
                     isDisabled = false
-                    try await Task.sleep(for: .seconds(delay))
-                    try await onFinish?()
+                    if let onFinish {
+                        if Task.isCancelled { return }
+                        try await onFinish()
+                    }
                 } catch {
                     progressViewTask?.cancel()
                     showProgressView = false
@@ -62,10 +65,10 @@ public struct AsyncButton<Label: View>: View {
             }
         } label: {
             label()
-                .opacity(showProgressView ? 0.1 : 1)
+                .opacity(showProgressView ? 0.5 : 1)
                 .overlay {
                     if showProgressView {
-                        LoadingIndicator(size: 25)
+                        LoadingIndicator(size: 20)
                     }
                 }
         }

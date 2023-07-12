@@ -18,9 +18,9 @@ where Content : View
                 WrappedStackLayout(alignment: alignment,
                            axis: axis,
                            content: content,
-                           horizontalSpacing: horizontalSpacing ?? 1,
+                           horizontalSpacing: horizontalSpacing ?? 3,
                            size: geometry.size,
-                           verticalSpacing: verticalSpacing ?? 1)
+                           verticalSpacing: verticalSpacing ?? 3)
                 .transaction {
                     updateTransaction($0)
                 }
