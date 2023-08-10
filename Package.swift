@@ -19,7 +19,7 @@ let package = Package(
             name: "XUI",
             dependencies: [
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
-                "NukeUI", .product(name: "NukeUI", package: "NukeUI"),
+                .product(name: "NukeUI", package: "NukeUI"),
                 .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
             ]
         ),

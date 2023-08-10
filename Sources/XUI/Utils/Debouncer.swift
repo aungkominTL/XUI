@@ -10,21 +10,23 @@ import Combine
 
 public class Debouncer: ObservableObject {
 
-    @Published private var counter = 0
+    @Published private var counter = -1
     private var cancellables = Set<AnyCancellable>()
-    public var onUpdate: (() -> Void) = {}
+    @MainActor public var onUpdate: (() -> Void) = {}
     private let queue = DispatchQueue(label: "com.jonahaung.debouncer")
-
+    private var isFirstTime = true
     public init() {
         $counter
             .removeDuplicates()
-            .debounce(for: 0.2, scheduler: queue)
+            .debounce(for: 0.1, scheduler: queue)
             .sink { [weak self] value in
                 guard let self else { return }
+                guard self.isFirstTime == false else {
+                    self.isFirstTime = false
+                    return
+                }
                 if value == 0 {
-                    DispatchQueue.safeAsync {
-                        self.onUpdate()
-                    }
+                    await self.onUpdate()
                 } else {
                     self.deQueue()
                 }

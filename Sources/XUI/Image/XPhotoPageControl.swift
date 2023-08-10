@@ -20,17 +20,11 @@ public struct XPhotoPageControl: View {
     }
     
     public var body: some View {
-        HStack(spacing: 0) {
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
             ForEach(0...length-1) { i in
                 let isSelected = selection.wrappedValue == i
-                AsyncButton(actionOptions: []) {
-                    selection.wrappedValue = i
-                } label: {
-                    Circle().fill(.foreground)
-                        .frame(square: isSelected ? size/2 : size)
-                        .padding(.vertical)
-                }
-                .buttonStyle(.borderless)
+                Circle()
+                    .frame(square: isSelected ? size/2 : size)
             }
         }
         .animation(.interactiveSpring(), value: selection.wrappedValue)

@@ -15,10 +15,10 @@ public enum XFontDesign: String, Identifiable, CaseIterable {
     public var id: String { rawValue }
     public static let key = "com.jonahaung.fontDesign"
     
-    var design: Font.Design {
+    public var design: Font.Design? {
         switch self {
         case .default:
-            return .default
+            return nil
         case .Serif:
             return .serif
         case .Rounded:
@@ -28,7 +28,7 @@ public enum XFontDesign: String, Identifiable, CaseIterable {
         }
     }
     
-    static var current: Self {
+    public static var current: Self {
         get {
             let string = UserDefaults.standard.string(forKey: self.key).str
             return .init(rawValue: string) ?? .default

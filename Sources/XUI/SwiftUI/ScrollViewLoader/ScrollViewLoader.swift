@@ -9,8 +9,7 @@ public enum OffsetTrigger {
 }
 
 extension View {
-    public func shouldLoadMore(bottomDistance offsetTrigger: OffsetTrigger = .relative(0.5),
-                        shouldLoadMore: @escaping () async -> ()) -> some View  {
+    public func shouldLoadMore(bottomDistance offsetTrigger: OffsetTrigger, shouldLoadMore: @escaping () async -> ()) -> some View  {
         return DelegateHolder(offsetNotifier: ScrollOffsetNotifier(offsetTrigger: offsetTrigger,
                                                                    onNotify: shouldLoadMore),
                               content: self)
@@ -61,7 +60,6 @@ class ScrollOffsetNotifier: NSObject, UIScrollViewDelegate, ObservableObject {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         let triggerHeight: CGFloat
         
         switch trigger {
@@ -72,7 +70,6 @@ class ScrollOffsetNotifier: NSObject, UIScrollViewDelegate, ObservableObject {
         }
         
         let bottomOffset = (scrollView.contentSize.height + scrollView.contentInset.bottom) - (scrollView.contentOffset.y + scrollView.visibleSize.height)
-        
         Task { @MainActor in
             if bottomOffset < triggerHeight, canNotify {
                 oldContentHeight = scrollView.contentSize.height

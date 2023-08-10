@@ -18,9 +18,10 @@ public struct MediaPlayerView: View {
 
     public var body: some View {
         VideoPlayer(player: player)
-            .edgesIgnoringSafeArea(.all)
+            .ignoresSafeArea()
             .onAppear{
                 player.play()
             }
+            .navigationBarItems(trailing: _DismissButton())
     }
 }

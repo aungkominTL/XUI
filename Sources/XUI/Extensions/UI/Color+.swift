@@ -85,7 +85,7 @@ public extension Color {
 }
 
 public extension Color {
-    init?(hex: String) {
+    init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
 
@@ -98,7 +98,10 @@ public extension Color {
 
         let length = hexSanitized.count
 
-        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else { return nil }
+        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else {
+            self.init("AccentColor")
+            return
+        }
 
         if length == 6 {
             r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
@@ -111,10 +114,7 @@ public extension Color {
             b = CGFloat((rgb & 0x0000FF00) >> 8) / 255.0
             a = CGFloat(rgb & 0x000000FF) / 255.0
 
-        } else {
-            return nil
         }
-
         self.init(red: r, green: g, blue: b, opacity: a)
     }
 

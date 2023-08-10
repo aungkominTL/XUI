@@ -7,6 +7,29 @@
 
 import SwiftUI
 
+private struct Synchronizer<Value: Equatable>: ViewModifier {
+    
+    var original: Binding<Value>
+    var changed: Binding<Value>
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                changed.wrappedValue = original.wrappedValue
+            }
+            .onDisappear {
+                original.wrappedValue = changed.wrappedValue
+            }
+    }
+}
+
+public extension View {
+    func synchronizeLazily<Value: Equatable>(_ original: Binding<Value>, _ changed: Binding<Value>) -> some View {
+        ModifiedContent(content: self, modifier: Synchronizer(original: original, changed: changed))
+    }
+}
+
+
 public extension View {
 
     @ViewBuilder func withHorizontalSpacing(width: CGFloat = 8, height: CGFloat? = nil) -> some View {

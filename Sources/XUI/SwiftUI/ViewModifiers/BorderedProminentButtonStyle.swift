@@ -10,12 +10,12 @@ import SwiftUI
 private struct BorderedProminentButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 6)
+            RoundedRectangle(cornerRadius: 8)
                 .fill(Color.accentColor)
-                .frame(height: 36)
             content
                 .foregroundColor(.white)
         }
+        .frame(height: 35)
         ._flexible(.horizontal)
     }
 }
@@ -29,11 +29,11 @@ public extension View {
 private struct BorderedProminentLightButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.secondary, lineWidth: 1)
-                .frame(height: 36)
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(Color(uiColor: .opaqueSeparator), lineWidth: 1)
             content
         }
+        .frame(height: 35)
         ._flexible(.horizontal)
     }
 }
@@ -53,7 +53,6 @@ private struct NavigationLinkStyle: ViewModifier {
             SystemImage(.chevronRight)
                 .imageScale(.small)
                 .foregroundStyle(.tertiary)
-            
         }
         .foregroundColor(.primary)
     }
@@ -68,21 +67,19 @@ public extension View {
 private struct BorderStyle: ViewModifier {
     
     let color: Color
-    let lineWIdth: CGFloat
-    let background: Color
+    let lineWidth: CGFloat
     
     func body(content: Content) -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8)
-                .stroke(color, lineWidth: lineWIdth)
-                .background(background)
+                .stroke(color, lineWidth: lineWidth)
             content
         }
     }
 }
 
 public extension View {
-    func _borderStyle(_ color: Color = .secondary, _ lineWIdth: CGFloat = 1, background: Color = .clear) -> some View {
-        ModifiedContent(content: self, modifier: BorderStyle(color: color, lineWIdth: lineWIdth, background: background))
+    func _borderStyle(_ color: Color = .secondary, _ lineWidth: CGFloat = 1) -> some View {
+        ModifiedContent(content: self, modifier: BorderStyle(color: color, lineWidth: lineWidth))
     }
 }

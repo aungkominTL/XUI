@@ -8,7 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-public struct ReorderableForEach<Data, Content>: View where Data : Hashable, Content : View {
+public struct ReorderableForEach<Data, Content>: View where Data : Hashable&Identifiable, Content : View {
 
     @Binding var data: [Data]
     @Binding var allowReordering: Bool
@@ -26,15 +26,15 @@ public struct ReorderableForEach<Data, Content>: View where Data : Hashable, Con
     }
 
     public var body: some View {
-        ForEach(data, id: \.self) { item in
+        ForEach(data) { item in
             if allowReordering {
                 content(item, hasChangedLocation && draggedItem == item)
                     .onDrag {
                         _Haptics.play(.light)
                         draggedItem = item
-                        return NSItemProvider(object: "\(item.hashValue)" as NSString)
+                        return NSItemProvider(object: "\(item.id)" as NSString)
                     }
-                    .onDrop(of: [UTType.plainText], delegate: ReorderDropDelegate(
+                    .onDrop(of: [UTType.image, UTType.video], delegate: ReorderDropDelegate(
                         item: item,
                         data: $data,
                         draggedItem: $draggedItem,
@@ -63,8 +63,8 @@ public struct ReorderableForEach<Data, Content>: View where Data : Hashable, Con
             if data[to] != current {
                 data.move(fromOffsets: IndexSet(integer: from),
                           toOffset: (to > from) ? to + 1 : to)
+                _Haptics.play(.light)
             }
-            _Haptics.play(.light)
         }
 
         func dropUpdated(info: DropInfo) -> DropProposal? {

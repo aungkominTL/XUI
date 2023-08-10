@@ -8,18 +8,19 @@
 import SwiftUI
 
 private struct PresentSheetModifier<Destination: View>: ViewModifier {
-
+    
     @ViewBuilder var destination: (() -> Destination)
+    var onDismiss: (() -> Void)?
     @State private var isShown = false
     
     public func body(content: Content) -> some View {
-        AsyncButton(actionOptions: [.disableButton]) {
+        AsyncButton {
             isShown = true
         } label: {
             content
         }
         .buttonStyle(.borderless)
-        .sheet(isPresented: $isShown) {
+        .sheet(isPresented: $isShown, onDismiss: onDismiss) {
             destination()
                 .xThemeStyle()
         }
@@ -27,18 +28,18 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
 }
 
 private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
-
     @ViewBuilder var destination: (() -> Destination)
+    var onDismiss: (() -> Void)?
     @State private var isShown = false
 
     public func body(content: Content) -> some View {
-        AsyncButton(actionOptions: [.disableButton]) {
+        AsyncButton {
             isShown = true
         } label: {
             content
         }
         .buttonStyle(.borderless)
-        .fullScreenCover(isPresented: $isShown) {
+        .fullScreenCover(isPresented: $isShown, onDismiss: onDismiss) {
             destination()
                 .xThemeStyle()
         }
@@ -47,10 +48,10 @@ private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
 
 @available(iOS 16.0, *)
 public extension View {
-    func _presentSheet<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
-        ModifiedContent(content: self, modifier: PresentSheetModifier(destination: content))
+    func _presentSheet<Content: View>(@ViewBuilder content: @escaping () -> Content, onDismiss: (() -> Void)? = nil) -> some View {
+        ModifiedContent(content: self, modifier: PresentSheetModifier(destination: content, onDismiss: onDismiss))
     }
-    func _presentFullScreen<Content: View>(@ViewBuilder content: @escaping () -> Content) -> some View {
-        ModifiedContent(content: self, modifier: PresentFullScreenModifier(destination: content))
+    func _presentFullScreen<Content: View>(@ViewBuilder content: @escaping () -> Content, onDismiss: (() -> Void)? = nil) -> some View {
+        ModifiedContent(content: self, modifier: PresentFullScreenModifier(destination: content, onDismiss: onDismiss))
     }
 }

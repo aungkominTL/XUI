@@ -9,6 +9,9 @@ import SwiftUI
 
 public extension String {
 
+    var remove_: String {
+        replace("_", with: " ")
+    }
     func replace(_ target: String, with string: String) -> String {
         self.replacingOccurrences(of: target, with: string, options: NSString.CompareOptions.literal, range: nil)
     }

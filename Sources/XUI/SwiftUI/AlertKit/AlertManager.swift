@@ -26,17 +26,10 @@ public class AlertManager: ObservableObject {
     @MainActor public func show(_ error: Error, _ action: @escaping () -> Void) {
         self.show(dismiss: .error(message: error.localizedDescription, dismissButton: .cancel(action)))
     }
+    @MainActor public func showSuccess(_ message: String, _ action: @escaping () -> Void) {
+        self.showActionSheet(.custom(title: "Success", message: message, buttons: [.cancel(action)]))
+    }
     @MainActor public func showActionSheet(_ error: Error, _ action: @escaping () -> Void) {
         self.showActionSheet(.custom(title: "Error", message: error.localizedDescription, buttons: [.cancel(action)]))
     }
-}
-
-extension View {
-    public func uses(_ alertManager: AlertManager) -> some View {
-        self.modifier(AlertViewModifier(alertManager: alertManager))
-    }
-    public func customAlert<AlertContent: View>(manager: CustomAlertManager, content: @escaping () -> AlertContent, buttons: [CustomAlertButton]) -> some View {
-        self.modifier(CustomAlertViewModifier(customAlertManager: manager, alertContent: content, buttons: buttons))
-    }
-
 }

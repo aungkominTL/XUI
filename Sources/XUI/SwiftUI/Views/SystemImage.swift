@@ -28,6 +28,7 @@ public struct SystemImage: View {
             .if_let(size) { value, view in
                 view
                     .resizable()
+                    .scaledToFit()
                     .frame(square: value)
             }
             .if (isRandomColor) { view in

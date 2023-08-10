@@ -73,6 +73,7 @@ private struct XPickerView<Item: _PickableItem>: View {
                                 let isSelected = item.title == pickedItem.title
                                 SystemImage(isSelected ? .checkmark : .circle)
                                     .symbolVariant(isSelected ? .circle.fill : .none)
+                                    .symbolRenderingMode(.multicolor)
                                     .foregroundColor(isSelected ? .green : Color(uiColor: .quaternaryLabel))
                                     .imageScale(.large)
                                     .padding(.trailing, 3)

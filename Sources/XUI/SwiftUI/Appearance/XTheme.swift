@@ -12,12 +12,11 @@ private struct XThemeStyleModifier: ViewModifier {
     @AppStorage(XAccentColor.key) private var accentColor: String = XAccentColor.current.toHex().str
     @Environment(\.colorScheme) private var colorScheme: ColorScheme
     @AppStorage(XColorScheme.key) private var style: XColorScheme = .current
-    
+
     func body(content: Content) -> some View {
         content
-            .xListStyle()
-            .xFontDesign()
-            .accentColor(Color(hex: accentColor) ?? nil)
+//            .xListStyle()
+            .tint(Color(hex: accentColor))
             .colorScheme(style.colorScheme ?? colorScheme)
     }
 }

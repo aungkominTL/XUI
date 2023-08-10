@@ -34,3 +34,15 @@ public extension CGFloat {
         Float(self)
     }
 }
+
+public extension Float {
+    var int: Int {
+        Int(self)
+    }
+    var double: Double {
+        Double(self)
+    }
+    var cgFloat: CGFloat {
+        CGFloat(self)
+    }
+}

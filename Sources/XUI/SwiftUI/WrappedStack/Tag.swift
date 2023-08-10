@@ -19,9 +19,10 @@ public struct _Tag<Content>: View where Content: View {
     
     public var body: some View {
         content()
-            .font(.footnote)
+            .font(.system(size: UIFont.smallSystemFontSize, weight: .medium, design: .serif))
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            ._borderStyle(color.opacity(0.7), 1)
+            ._borderStyle(color)
+        
     }
 }

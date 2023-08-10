@@ -19,10 +19,9 @@ private struct OnAppearAfterModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                    perform()
-                }
+            .task {
+                try? await Task.sleep(for: .seconds(timeout))
+                perform()
             }
     }
 }

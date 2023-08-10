@@ -27,7 +27,7 @@ import Foundation
         get { getValue() }
         set { setValue(newValue) }
     }
-
+    
      private func getValue() -> T {
         os_unfair_lock_lock(lock)
         defer { os_unfair_lock_unlock(lock) }
@@ -43,7 +43,7 @@ import Foundation
 
 @propertyWrapper
 public struct AtomicQueue<Value> {
-    private let queue = DispatchQueue(label: "com.jonahaung.atomic")
+    private let queue = DispatchQueue(label: "com.jonahaung.AtomicQueue")
     private var value: Value
     
     public init(wrappedValue: Value) {

@@ -21,7 +21,7 @@ public final class ScrollViewPrefetcher {
     private var isRefreshScheduled = false
     private var prefetchWindow = 0..<0
 
-    public init(prefetchWindowSize: Int = 12) {
+    public init(prefetchWindowSize: Int = 3) {
         self.prefetchWindowSize = prefetchWindowSize
     }
 

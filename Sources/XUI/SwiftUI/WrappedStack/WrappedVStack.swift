@@ -6,9 +6,7 @@
 
 import SwiftUI
 
-public struct WrappedVStack<Content>: View
-where Content : View
-{
+public struct WrappedVStack<Content>: View where Content : View {
     public var body: WrappedStack<Content>
 }
 

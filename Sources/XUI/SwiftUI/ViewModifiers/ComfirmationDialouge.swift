@@ -16,12 +16,11 @@ private struct XDialogModifier<DialogContent: View>: ViewModifier {
 
     public func body(content: Content) -> some View {
         AsyncButton {
-            try await Task.sleep(for: .seconds(0.5))
             isShown = true
         } label: {
             content
         }
-        .confirmationDialog(title, isPresented: $isShown, titleVisibility: .visible, actions: {
+        .confirmationDialog(.init(title), isPresented: $isShown, titleVisibility: .visible, actions: {
             dialogContent()
         }, message: {
             Text(.init(message))

@@ -17,7 +17,7 @@ public struct AsyncButton<Label: View>: View {
 
     @ViewBuilder var label: () -> Label
 
-    private var delay: Double = 0.1
+    private var delay: Double = 0.2
     @State private var isDisabled = false
     @State private var showProgressView = false
 
@@ -48,7 +48,6 @@ public struct AsyncButton<Label: View>: View {
                     try await Task.sleep(for: .seconds(delay))
                     if Task.isCancelled { return }
                     try await action()
-                    _Haptics.play(.soft)
                     progressViewTask?.cancel()
                     showProgressView = false
                     isDisabled = false
@@ -65,10 +64,10 @@ public struct AsyncButton<Label: View>: View {
             }
         } label: {
             label()
-                .opacity(showProgressView ? 0.5 : 1)
+                .opacity(showProgressView ? 0.01 : 1)
                 .overlay {
                     if showProgressView {
-                        LoadingIndicator(size: 20)
+                        ProgressView()
                     }
                 }
         }

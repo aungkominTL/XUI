@@ -16,7 +16,7 @@ public enum XAccentColor {
             guard let accentColor = UserDefaults.standard.string(forKey: Self.key), !accentColor.isEmpty else {
                 return .accentColor
             }
-            return Color(hex: accentColor) ?? .blue
+            return Color(hex: accentColor)
         }
         set {
             UserDefaults.standard.setValue(newValue.toHex(), forKey: Self.key)
@@ -46,7 +46,7 @@ public enum XAccentColor {
         @AppStorage(XAccentColor.key) private var value: String = XAccentColor.current.toHex().str
         func body(content: Content) -> some View {
             content
-                .accentColor(Color(hex: value) ?? nil)
+                .tint(Color(hex: value))
         }
     }
     
