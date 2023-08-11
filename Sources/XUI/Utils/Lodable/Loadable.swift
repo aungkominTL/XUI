@@ -9,11 +9,11 @@
 import Foundation
 import SwiftUI
 
-public typealias LoadableSubject<Value> = Binding<Loadable<Value>>
+//public typealias LoadableSubject<Value> = Binding<Loadable<Value>>
 
 public enum Loadable<T> {
     
-    case notRequested
+    case intro
     case loading
     case loaded(value: T, isLoadingMore: Bool)
     case failed(Error)
@@ -46,7 +46,7 @@ public extension Loadable {
     func map<V>(_ transform: (T) throws -> V) -> Loadable<V> {
         do {
             switch self {
-            case .notRequested: return .notRequested
+            case .intro: return .intro
             case let .failed(error): return .failed(error)
             case let .loaded(value, isLoadingMore):
                 return .loaded(value: try transform(value), isLoadingMore: isLoadingMore)
@@ -87,7 +87,7 @@ public extension Loadable where T: SomeOptional {
 extension Loadable: Equatable where T: Equatable {
     public static func == (lhs: Loadable<T>, rhs: Loadable<T>) -> Bool {
         switch (lhs, rhs) {
-        case (.notRequested, .notRequested): return true
+        case (.intro, .intro): return true
         case (.loading, .loading): return true
         case let (.loaded(oneA, oneB), .loaded(twoA, twoB)): return oneA == twoA && oneB == twoB
         case let (.failed(lhsE), .failed(rhsE)):
