@@ -10,7 +10,7 @@ import PhotosUI
 import AVKit
 
 public struct _PhotoPicker: UIViewControllerRepresentable {
-    @Binding public var attachments: [Attachment]
+    @Binding public var attachments: [XAttachment]
     @Binding public var image: UIImage?
     public var multipleSelection: Bool
     private var filter: PHPickerFilter? = .any(of: [.images, .screenshots])
@@ -21,7 +21,7 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
     private let photoLibrary: PHPhotoLibrary = .shared()
     @Environment(\.dismiss) private var dismiss
     
-    public init(attachments: Binding<[Attachment]>, image: Binding<UIImage>? = nil, multipleSelection: Bool, filter: PHPickerFilter? = nil) {
+    public init(attachments: Binding<[XAttachment]>, image: Binding<UIImage>? = nil, multipleSelection: Bool, filter: PHPickerFilter? = nil) {
         _attachments = attachments
         _image = .constant(nil)
         self.multipleSelection = multipleSelection
@@ -76,13 +76,13 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
                         guard let imageURL = try uiImage.temporaryLocalFileUrl(id: id, quality: 1) else {
                             return
                         }
-                        let attachment = Attachment(url: imageURL.absoluteString, type: .photo, identifier: id)
+                        let attachment = XAttachment(url: imageURL.absoluteString, type: .photo, identifier: id)
                         parent.attachments.append(attachment)
                     } catch {
                         Log(error.localizedDescription)
                     }
                 case let movieURL as URL:
-                    let attachment = Attachment(url: movieURL.absoluteString, type: .video, identifier: id)
+                    let attachment = XAttachment(url: movieURL.absoluteString, type: .video, identifier: id)
                     parent.attachments.append(attachment)
                 default:
                     break

@@ -10,10 +10,10 @@ import SwiftUI
 public struct ImagePickerView: UIViewControllerRepresentable {
     
     let sourceType: UIImagePickerController.SourceType
-    let onPicked: (Attachment) -> Void
+    let onPicked: (XAttachment) -> Void
     @Environment(\.dismiss) var dismiss
     
-    public init(sourceType: UIImagePickerController.SourceType, onPicked: @escaping (Attachment) -> Void) {
+    public init(sourceType: UIImagePickerController.SourceType, onPicked: @escaping (XAttachment) -> Void) {
         self.sourceType = sourceType
         self.onPicked = onPicked
     }
@@ -48,14 +48,14 @@ public final class ImagePickerCoordinator: NSObject, UIImagePickerControllerDele
             do {
                 let imageURL = try uiImage.resize(600).temporaryLocalFileUrl(id: UUID().uuidString, quality: 0.5)
                 if let imageURL {
-                    let attachment = Attachment(url: imageURL.absoluteString, type: .photo)
+                    let attachment = XAttachment(url: imageURL.absoluteString, type: .photo)
                     parent.onPicked(attachment)
                 }
             } catch {
                 print(error)
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            let attachment = Attachment(url: videoURL.absoluteString, type: .video)
+            let attachment = XAttachment(url: videoURL.absoluteString, type: .video)
             parent.onPicked(attachment)
         }
         parent.dismiss()

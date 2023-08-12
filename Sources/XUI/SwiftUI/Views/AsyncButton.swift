@@ -6,10 +6,8 @@
 //
 
 import SwiftUI
-
+public typealias AsyncAction = (@MainActor @Sendable() async throws -> Void)
 public struct AsyncButton<Label: View>: View {
-
-    public typealias AsyncAction = (@MainActor @Sendable() async throws -> Void)
     var actionOptions = Set(ActionOption.allCases)
     let action: AsyncAction
     var onFinish: AsyncAction?
@@ -21,7 +19,13 @@ public struct AsyncButton<Label: View>: View {
     @State private var isDisabled = false
     @State private var showProgressView = false
 
-    public init(actionOptions: Set<ActionOption> = [.disableButton], action: @escaping AsyncAction, label: @escaping () -> Label, onFinish: AsyncAction? = nil, onError: ((Error) -> Void)? = nil) {
+    public init(
+        actionOptions: Set<ActionOption> = [.disableButton],
+        action: @escaping AsyncAction,
+        label: @escaping () -> Label,
+        onFinish: AsyncAction? = nil,
+        onError: ((Error) -> Void)? = nil
+    ) {
         self.actionOptions = actionOptions
         self.action = action
         self.label = label

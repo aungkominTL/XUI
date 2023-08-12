@@ -7,21 +7,7 @@
 
 import SwiftUI
 
-public protocol _PickableItem {
-    var title: String { get }
-}
-
-extension _PickableItem {
-    var isEmpty: Bool { title.isWhitespace || title == "Any" }
-}
-
-extension String: _PickableItem {
-    public var title: String {
-        self
-    }
-}
-
-public struct _NavPickerBar<Item: _PickableItem>: View {
+public struct XNavPickerBar<Item: XPickable>: View {
     
     private let title: String
     private let items: [Item]
@@ -52,7 +38,7 @@ public struct _NavPickerBar<Item: _PickableItem>: View {
     }
 }
 
-private struct XPickerView<Item: _PickableItem>: View {
+private struct XPickerView<Item: XPickable>: View {
     
     let title: String
     let items: [Item]
