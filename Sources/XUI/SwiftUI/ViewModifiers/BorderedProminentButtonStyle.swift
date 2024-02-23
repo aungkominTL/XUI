@@ -9,14 +9,13 @@ import SwiftUI
 
 private struct BorderedProminentButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.accentColor)
+        HStack {
             content
-                .foregroundColor(.white)
         }
-        .frame(height: 35)
+        .foregroundStyle(Color.systemBackground)
+        .frame(height: 38)
         ._flexible(.horizontal)
+        .background(Color.accentColor.gradient, in: Capsule())
     }
 }
 
@@ -28,13 +27,12 @@ public extension View {
 
 private struct BorderedProminentLightButtonStyle: ViewModifier {
     func body(content: Content) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(Color(uiColor: .opaqueSeparator), lineWidth: 1)
+        HStack {
             content
         }
-        .frame(height: 35)
+        .frame(height: 38)
         ._flexible(.horizontal)
+        .background(Color(uiColor: .opaqueSeparator).gradient, in: Capsule())
     }
 }
 

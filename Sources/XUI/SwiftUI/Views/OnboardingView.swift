@@ -7,13 +7,24 @@
 
 import SwiftUI
 
-public struct _Onboarding: Identifiable, Hashable {
+public enum Onboarding {
+    static let key = "com.jonahaung.hasShownOnboarding"
+    public static var hasShown: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: Self.key)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Self.key)
+        }
+    }
+}
+public struct OnboardingItem: Identifiable, Hashable {
     
     public let id = UUID()
     public let title: String
     public let subtitle: String
     public let imageName: String
-
+    
     public init(title: String, subtitle: String, imageName: String) {
         self.title = title
         self.subtitle = subtitle
@@ -21,19 +32,18 @@ public struct _Onboarding: Identifiable, Hashable {
     }
 }
 
-public struct _OnboardingView: View {
+public struct OnboardingView: View {
 
-    private var hasShownOnboarding: Binding<Bool>
     @State private var current = 0
-    private let items: [_Onboarding]
-
+    private let items: [OnboardingItem]
+    private let onClose: (() -> Void)?
     @Environment(\.dismiss) private var dismiss
-
-    public init(hasShownOnboarding: Binding<Bool>, items: [_Onboarding]) {
-        self.hasShownOnboarding = hasShownOnboarding
+    
+    public init(items: [OnboardingItem], _ onClose: (() -> Void)? = nil) {
         self.items = items
+        self.onClose = onClose
     }
-
+    
     public var body: some View {
         TabView(selection: $current) {
             ForEach(0..<items.count, id: \.self) { i in
@@ -43,12 +53,13 @@ public struct _OnboardingView: View {
                 }
             }
         }
-        .animation(.interactiveSpring(), value: current)
-        .background(Color(uiColor: .systemBackground))
+        .animation(.snappy, value: current)
         .overlay(overlayView)
         .tabViewStyle(.page(indexDisplayMode: .never))
+        .ignoresSafeArea(.container, edges: .vertical)
+        .statusBarHidden(true)
     }
-
+    
     private var overlayView: some View {
         VStack {
             HStack {
@@ -74,22 +85,22 @@ public struct _OnboardingView: View {
                             .padding()
                     }
                 } else {
+                    let hasShownOnboarding = Onboarding.hasShown
                     Button {
-                        if hasShownOnboarding.wrappedValue == true {
-                            dismiss()
-                        } else {
-                            hasShownOnboarding.wrappedValue = true
-                        }
+                        Onboarding.hasShown = true
+                        dismiss()
+                        onClose?()
                     } label: {
-                        Text(hasShownOnboarding.wrappedValue ? "Close" : "Done & Continue")
+                        Text(hasShownOnboarding ? "Close" : "Done & Continue")
+                            ._borderedProminentButtonStyle()
                     }
-                    ._borderedProminentButtonStyle()
+                    .padding()
                 }
             }
         }
         .padding()
     }
-
+    
     private var hasNext: Bool { current+1 < items.count  }
     private var hasPrevious: Bool { current > 0 }
     
@@ -98,7 +109,7 @@ public struct _OnboardingView: View {
             current += 1
         }
     }
-
+    
     private func previous() {
         if hasPrevious {
             current -= 1
@@ -112,21 +123,20 @@ public struct _OnboardingView: View {
 }
 
 private struct OnboardingCell: View {
-    let item: _Onboarding
+    let item: OnboardingItem
     let index: Int
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            Image(item.imageName)
-                .resizable()
-                .aspectRatio(1, contentMode: .fill)
-            VStack {
-                Text(item.title)
-                    .font(.title)
-                Text(item.subtitle)
-                    .font(.body)
-            }
-            .padding()
-            Spacer(minLength: 50)
-        }
+        GeometryReader { geo in
+            StickyHeaderScrollView(header: {
+                StickyHeaderImage(Image(item.imageName))
+            }, headerHeight: geo.size.height/2.5) {
+                VStack {
+                    Text(item.title)
+                        .font(.title)
+                    Text(item.subtitle)
+                        .font(.body)
+                }
+                .padding()
+            }}
     }
 }

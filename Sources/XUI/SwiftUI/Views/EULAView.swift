@@ -7,15 +7,26 @@
 
 import SwiftUI
 
-public struct _EULAView: View {
+public enum EULA {
+    static let key = "com.jonahaung.hasShownEULA"
+    public static var hasShown: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: Self.key)
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Self.key)
+        }
+    }
+}
 
-    private var hasAgreedEULA: Binding<Bool>
+public struct EULAView: View {
+
     private let text: String
-
+    private let onClose: (() -> Void)?
     @Environment(\.dismiss) private var dismiss
 
-    public init(hasAgreedEULA: Binding<Bool>, text: String) {
-        self.hasAgreedEULA = hasAgreedEULA
+    public init(text: String, _ onClose: (() -> Void)? = nil) {
+        self.onClose = onClose
         self.text = text
     }
 
@@ -33,14 +44,13 @@ public struct _EULAView: View {
         }
         .background(Color(uiColor: .secondarySystemGroupedBackground))
         .safeAreaInset(edge: .bottom) {
+            let hasAgreedEULA = EULA.hasShown
             Button {
-                if hasAgreedEULA.wrappedValue {
-                    dismiss()
-                } else {
-                    hasAgreedEULA.wrappedValue = true
-                }
+                EULA.hasShown = true
+                dismiss()
+                onClose?()
             } label: {
-                Text(hasAgreedEULA.wrappedValue ? "Close" : "I agree and continue")
+                Text(hasAgreedEULA ? "Close" : "I agree and continue")
                     ._borderedProminentButtonStyle()
             }
             .padding(.horizontal)

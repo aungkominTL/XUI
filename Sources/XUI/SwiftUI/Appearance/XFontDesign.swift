@@ -9,8 +9,7 @@ import SwiftUI
 
 public enum XFontDesign: String, Identifiable, CaseIterable {
     
-    case `default`, Serif, Rounded
-    case Monospace = "Mono"
+    case `default`, Serif, Rounded, Monospace
     
     public var id: String { rawValue }
     public static let key = "com.jonahaung.fontDesign"

@@ -14,7 +14,7 @@ public enum XAccentColor {
     static var current: Color {
         get {
             guard let accentColor = UserDefaults.standard.string(forKey: Self.key), !accentColor.isEmpty else {
-                return .accentColor
+                return Color.link
             }
             return Color(hex: accentColor)
         }
@@ -28,17 +28,13 @@ public enum XAccentColor {
     }
     
     public struct _Picker: View {
-        @AppStorage(XAccentColor.key) private var value: String = ""
         public init() {}
-        
         public var body: some View {
-            ColorPicker(selection: .init(get: {
+            ColorPicker("Tint Color", selection: .init(get: {
                 XAccentColor.current
-            }, set: { new in
-                value = new.toHex().str
-            }), supportsOpacity: false) {
-                Text("Tint Color")
-            }
+            }, set: { newValue in
+                XAccentColor.current = Color(hex: newValue.toHex().str)
+            }), supportsOpacity: true)
         }
     }
     
