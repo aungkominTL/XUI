@@ -1,61 +1,60 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Aung Ko Min on 16/7/23.
 //
 
 import SwiftUI
 
-public struct _InsetGroupSection<Content: View, Header: View, Footer: View>: View {
+public struct InsetGroupSection<Content: View, Header: View, Footer: View>: View {
     
     @ViewBuilder private var content: () -> Content
     @ViewBuilder private var header: (() -> Header)
     @ViewBuilder private var footer: (() -> Footer)
+    private let outerPadding: CGFloat
+    private let innerPadding: CGFloat
     
-
-    public init(content: @escaping () -> Content, @ViewBuilder header: @escaping (() -> Header) = { Group {} }, @ViewBuilder footer: @escaping (() -> Footer) = { Group {} }) {
+    
+    public init(outerPadding: CGFloat = 2, innerPadding: CGFloat = 2, content: @escaping () -> Content, @ViewBuilder header: @escaping (() -> Header) = { Group {} }, @ViewBuilder footer: @escaping (() -> Footer) = { Group {} }) {
         self.content = content
         self.header = header
         self.footer = footer
+        self.outerPadding = UIFontMetrics.default.scaledValue(for: outerPadding)
+        self.innerPadding = UIFontMetrics.default.scaledValue(for: innerPadding)
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             header()
-                .font(.subheadline.bold())
-                .padding(.horizontal)
-            ZStack {
-                Rectangle()
-                    .fill(Color(uiColor: .secondarySystemGroupedBackground))
-            
-                Group {
-                    content()
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 11))
-            
+                .font(.callout)
+                .padding(.horizontal, outerPadding + innerPadding)
+            content()
+                .padding(innerPadding)
+                .background(Color(uiColor: .secondarySystemGroupedBackground))
+                .containerShape(RoundedRectangle(cornerRadius: min(12, innerPadding <= 4 ? 0 : innerPadding)))
+                .compositingGroup()
             footer()
-                .font(.caption)
+                .font(.footnote)
                 .foregroundStyle(.secondary)
-                .padding(.horizontal)
+                .padding(.horizontal, outerPadding + innerPadding)
         }
-        .padding()
+        .padding(outerPadding)
+        ._flexible(.horizontal)
     }
 }
-
 struct TableCellStyle: ViewModifier {
-    let padding: EdgeInsets
     func body(content: Content) -> some View {
         content
-            .padding(padding)
-        Divider()
-            .padding(.leading)
+            .padding(.vertical, 4)
+            .background(alignment: .bottom) {
+                Divider().padding(.horizontal, 8)
+            }
     }
 }
 
 public extension View {
-    func tableCellStyle(_ padding: EdgeInsets = .init(top: UIFontMetrics.default.scaledValue(for: 8), leading: UIFontMetrics.default.scaledValue(for: 16), bottom: UIFontMetrics.default.scaledValue(for: 8), trailing: 0)) -> some View {
-        self.modifier(TableCellStyle(padding: padding))
+    public func tableCellStyle() -> some View {
+        self.modifier(TableCellStyle())
     }
 }

@@ -20,7 +20,6 @@ public struct _FormCell<Left: View, Right: View>: View {
     public var body: some View {
         HStack {
             left()
-                .foregroundStyle(.secondary)
             Spacer()
             right()
         }
