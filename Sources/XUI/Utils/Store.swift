@@ -35,9 +35,7 @@ public extension Store {
         return map(keyPath).removeDuplicates().eraseToAnyPublisher()
     }
 }
-
-// MARK: -
-
+    
 public extension Binding where Value: Equatable {
     func dispatched<State>(to state: Store<State>,
                            _ keyPath: WritableKeyPath<State, Value>) -> Self {
