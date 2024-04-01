@@ -32,40 +32,8 @@ public struct ScrollViewWithOffsetTracker<Content: View>: View {
             ScrollViewOffsetTracker {
                 content()
             }
-        }.withScrollOffsetTracking(action: onScroll)
-    }
-}
-
-struct ScrollViewWithOffsetTracking_Previews: PreviewProvider {
-
-    struct Preview: View {
-
-        @State
-        var scrollOffset: CGPoint = .zero
-
-        var body: some View {
-            NavigationView {
-                #if os(macOS)
-                Color.clear
-                #endif
-                ScrollViewWithOffsetTracker(onScroll: updateScrollOffset) {
-                    LazyVStack {
-                        ForEach(1...100, id: \.self) {
-                            Divider()
-                            Text("\($0)")
-                        }
-                    }
-                }
-                .navigationTitle("\(Int(scrollOffset.y))")
-            }
         }
-
-        func updateScrollOffset(_ offset: CGPoint) {
-            self.scrollOffset = offset
-        }
-    }
-
-    static var previews: some View {
-        Preview()
+        .scrollContentBackground(.visible)
+        .withScrollOffsetTracking(action: onScroll)
     }
 }
