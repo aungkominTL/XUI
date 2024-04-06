@@ -25,6 +25,9 @@ public final class Lorem {
         )
     }
 
+    public static var phoneNumber: String {
+        (80000000...999999999).randomElement()!.description
+    }
     /// Generates multiple words whose count is randomly selected from within the given range.
     ///
     /// - Parameter range: The range of number of words to generate.
