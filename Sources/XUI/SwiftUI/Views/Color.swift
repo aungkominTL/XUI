@@ -154,14 +154,12 @@ extension Color {
     /// - Returns: The `Color` object.
     ///
     /// This color doesn’t adapt to changes in the underlying trait environment.
-    @available(iOS 2.0, macCatalyst 2.0, *)
     static var darkText: Color { return Self(UIColor.darkText) }
     
     /// The nonadaptable system color for text on a dark background.
     /// - Returns: The `Color` object.
     ///
     /// This color doesn’t adapt to changes in the underlying trait environment.
-    @available(iOS 2.0, macCatalyst 2.0, *)
     static var lightText: Color { return Self(UIColor.lightText) }
 }
 
@@ -170,43 +168,30 @@ extension Color {
     // MARK: - Adaptable Colors
     
     /// A blue color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 13.0, tvOS 9.0, *)
     static var systemBlue: Color { return Self(UIColor.systemBlue) }
     /// A brown color that automatically adapts to the current trait environment.
-    @available(iOS 13.0, macCatalyst 13.0, tvOS 13.0, *)
     static var systemBrown: Color { return Self(UIColor.systemBrown) }
     /// A green color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 13.0, tvOS 9.0, *)
     static var systemGreen: Color { return Self(UIColor.systemGreen) }
     /// An indigo color that automatically adapts to the current trait environment.
-    @available(iOS 13.0, macCatalyst 13.0, tvOS 13.0, *)
     static var systemIndigo: Color { return Self(UIColor.systemIndigo) }
     /// An orange color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 13.0, tvOS 9.0, *)
     static var systemOrange: Color { return Self(UIColor.systemOrange) }
     /// A pink color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 7.0, tvOS 9.0, *)
     static var systemPink: Color { return Self(UIColor.systemPink) }
     /// A purple color that automatically adapts to the current trait environment.
-    @available(iOS 9.0, macCatalyst 13.0, tvOS 9.0, *)
     static var systemPurple: Color { return Self(UIColor.systemPurple) }
     /// A red color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 13.0, tvOS 9.0, *)
     static var systemRed: Color { return Self(UIColor.systemRed) }
     /// A teal color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 7.0, tvOS 9.0, *)
     static var systemTeal: Color { return Self(UIColor.systemTeal) }
     /// A yellow color that automatically adapts to the current trait environment.
-    @available(iOS 7.0, macCatalyst 7.0, tvOS 9.0, *)
     static var systemYellow: Color { return Self(UIColor.systemYellow) }
     /// A cyan color that automatically adapts to the current trait environment.
-    @available(iOS 15.0, macCatalyst 15.0, tvOS 15.0, *)
     static var systemCyan: Color { return Self(UIColor.systemCyan) }
     /// A mint color that automatically adapts to the current trait environment.
-    @available(iOS 15.0, macCatalyst 15.0, tvOS 15.0, *)
     static var systemMint: Color { return Self(UIColor.systemMint) }
     /// The first nondefault tint color value in the view’s hierarchy, ascending from and starting with the view itself.
-    @available(iOS 15.0, macCatalyst 15.0, tvOS 15.0, *)
     static var tintColor: Color { return Self(UIColor.tintColor) }
     
     // MARK: - Adaptable Gray Colors
@@ -214,47 +199,37 @@ extension Color {
     /// The standard base gray color that adapts to the environment.
     ///
     /// This color represents the standard system grey. It adapts to the current environment.
-    @available(iOS 7.0, macCatalyst 7.0, tvOS 9.0, *)
     static var systemGray: Color { return Self(UIColor.systemGray) }
     /// A second-level shade of grey that adapts to the environment.
     ///
     /// This color adapts to the current environment. In light environments, this grey is slightly lighter than `systemGray`. In dark environments, this grey is slightly darker than ``systemGray``.
-    @available(iOS 13.0, macCatalyst 13.0, *)
     static var systemGray2: Color { return Self(UIColor.systemGray2) }
     /// A third-level shade of grey that adapts to the environment.
     ///
     /// This color adapts to the current environment. In light environments, this grey is slightly lighter than ``systemGray2``. In dark environments, this grey is slightly darker than `systemGray2`.
-    @available(iOS 13.0, macCatalyst 13.0, *)
     static var systemGray3: Color { return Self(UIColor.systemGray3) }
     /// A fourth-level shade of grey that adapts to the environment.
     ///
     /// This color adapts to the current environment. In light environments, this grey is slightly lighter than ``systemGray3``. In dark environments, this grey is slightly darker than `systemGray3`.
-    @available(iOS 13.0, macCatalyst 13.0, *)
     static var systemGray4: Color { return Self(UIColor.systemGray4) }
     /// A fifth-level shade of grey that adapts to the environment.
     ///
     /// This color adapts to the current environment. In light environments, this grey is slightly lighter than ``systemGray4``. In dark environments, this grey is slightly darker than `systemGray4`.
-    @available(iOS 13.0, macCatalyst 13.0, *)
     static var systemGray5: Color { return Self(UIColor.systemGray5) }
     /// A sixth-level shade of grey that adapts to the environment.
     ///
     /// This color adapts to the current environment, and is close in color to ``systemBackground``. In light environments, this grey is slightly lighter than ``systemGray5``. In dark environments, this grey is slightly darker than `systemGray5`.
-    @available(iOS 13.0, macCatalyst 13.0, *)
     static var systemGray6: Color { return Self(UIColor.systemGray5) }
     
     // MARK: - Fixed Colors
     
     /// A color object with RGB values of `0.0`, `1.0`, and `1.0`, and an alpha value of `1.0`.
-    @available(iOS 2.0, macCatalyst 13.0, tvOS 9.0, watchOS 2.0, *)
     static var cyan: Color { return Self(UIColor.cyan) }
     /// A color object with a grayscale value of 1/3 and an alpha value of `1.0`.
-    @available(iOS 2.0, macCatalyst 13.0, tvOS 9.0, watchOS 2.0, *)
     static var darkGray: Color { return Self(UIColor.darkGray) }
     /// A color object with a grayscale value of 2/3 and an alpha value of `1.0`.
-    @available(iOS 2.0, macCatalyst 13.0, tvOS 9.0, watchOS 2.0, *)
     static var lightGray: Color { return Self(UIColor.lightGray) }
     /// A color object with RGB values of `1.0`, `0.0`, and `1.0`, and an alpha value of `1.0`.
-    @available(iOS 2.0, macCatalyst 13.0, tvOS 9.0, watchOS 2.0, *)
     static var magenta: Color { return Self(UIColor.magenta) }
 }
 

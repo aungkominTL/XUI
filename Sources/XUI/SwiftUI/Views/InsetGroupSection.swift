@@ -54,7 +54,7 @@ struct TableCellStyle: ViewModifier {
 }
 
 public extension View {
-    public func tableCellStyle() -> some View {
+    func tableCellStyle() -> some View {
         self.modifier(TableCellStyle())
     }
 }

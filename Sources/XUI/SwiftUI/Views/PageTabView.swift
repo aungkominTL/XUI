@@ -7,28 +7,28 @@
 
 import SwiftUI
 
-public struct _PageTabView<Items, ID, Content>: View where Items: RandomAccessCollection, ID: Hashable, Content: View {
+public struct _PageTabView<PageItems, ID, Content>: View where PageItems: RandomAccessCollection, ID: Hashable, Content: View {
 
-    let items: Array<Items.Element>
-    let keyPath: KeyPath<Items.Element, ID>
-    let content: (Items.Element) -> Content
+    let items: Array<PageItems.Element>
+    let keyPath: KeyPath<PageItems.Element, ID>
+    let content: (PageItems.Element) -> Content
 
-    class ViewModel<Items: RandomAccessCollection>: ObservableObject {
+    class ViewModel<T: RandomAccessCollection>: ObservableObject {
         @Published var ranges: [Int]
         @Published var current: Int = 0
-        init(items: Items) {
+        init(items: T) {
             ranges = Array(0..<items.count)
         }
     }
 
-    public init(_ items: Items, id: KeyPath<Items.Element, ID>, @ViewBuilder content: @escaping (Items.Element) -> Content) {
+    public init(_ items: PageItems, id: KeyPath<PageItems.Element, ID>, @ViewBuilder content: @escaping (PageItems.Element) -> Content) {
         self.items = items.map { val in val }
         self.keyPath = id
         self.content = content
         _model = .init(wrappedValue: .init(items: items))
     }
 
-    @StateObject var model: ViewModel<Items>
+    @StateObject var model: ViewModel<PageItems>
 
     public var body: some View {
         TabView(selection: $model.current) {

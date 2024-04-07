@@ -45,10 +45,10 @@ public struct ReorderableForEach<Data, Content>: View where Data : Hashable&Iden
         }
     }
 
-    struct ReorderDropDelegate<Data>: DropDelegate where Data : Equatable {
-        let item: Data
-        @Binding var data: [Data]
-        @Binding var draggedItem: Data?
+    struct ReorderDropDelegate<Item>: DropDelegate where Item : Equatable {
+        let item: Item
+        @Binding var data: [Item]
+        @Binding var draggedItem: Item?
         @Binding var hasChangedLocation: Bool
 
         func dropEntered(info: DropInfo) {
