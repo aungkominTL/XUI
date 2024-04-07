@@ -7,6 +7,7 @@
 
 import UIKit
 import AudioToolbox
+import CoreHaptics
 
 public struct _Haptics {
     public static func play(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
@@ -16,7 +17,7 @@ public struct _Haptics {
         }
         UIImpactFeedbackGenerator(style: style).impactOccurred()
     }
-
+    
     public static func generateNotificationFeedback(style: UINotificationFeedbackGenerator.FeedbackType) {
         guard !isLegacyTapticEngine else {
             generateLegacyFeedback()
@@ -24,14 +25,14 @@ public struct _Haptics {
         }
         UINotificationFeedbackGenerator().notificationOccurred(style)
     }
-
+    
     private static func generateLegacyFeedback() {
         AudioServicesPlaySystemSound(1519)
         AudioServicesPlaySystemSound(1520)
         AudioServicesPlaySystemSound(1521)
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
-
+    
     private static let isLegacyTapticEngine: Bool = {
         var systemInfo = utsname()
         uname(&systemInfo)

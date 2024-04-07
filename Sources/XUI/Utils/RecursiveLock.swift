@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 public final class RecursiveLock {
     private let lock = NSRecursiveLock()
     public func sync<T>(action: () -> T) -> T {
