@@ -18,7 +18,7 @@ public struct LoadingIndicator: View {
     public var body: some View {
         Circle()
             .trim(from: 0, to: 0.85)
-            .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 2, lineCap: .butt, lineJoin: .round))
+            .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .butt, lineJoin: .round))
             .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
             .animation(.linear(duration: 0.9).repeatForever(autoreverses: false), value: isLoading)
             .frame(square: size)
@@ -26,5 +26,23 @@ public struct LoadingIndicator: View {
             .task {
                 self.isLoading = true
             }
+    }
+}
+
+private struct LoadingViewModifier: ViewModifier {
+    var loading: Binding<Bool>
+    public func body(content: Content) -> some View {
+        content
+            .overlay {
+                if loading.wrappedValue {
+                    LoadingIndicator()
+                }
+            }
+    }
+}
+
+public extension View {
+    func showLoading(_ isLoading: Binding<Bool>) -> some View {
+        modifier(LoadingViewModifier(loading: isLoading))
     }
 }
