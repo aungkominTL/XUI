@@ -2,7 +2,7 @@
 //  NotificationCenterKey.swift
 //  MoreUI
 //
-//  Created by Ryan Rudes on 11/7/21.
+//  Created by Aung Ko Min on 11/7/21.
 //
 
 import SwiftUI
@@ -11,14 +11,14 @@ private struct NotificationCenterKey: EnvironmentKey {
     static let defaultValue = UNUserNotificationCenter.current()
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
     var notificationCenter: UNUserNotificationCenter {
         get { self[NotificationCenterKey.self] }
         set { self[NotificationCenterKey.self] = newValue }
     }
 }
 
-extension UNUserNotificationCenter {
+public extension UNUserNotificationCenter {
     @available(iOS 15.0, *)
     func post(title: String,
               subtitle: String,

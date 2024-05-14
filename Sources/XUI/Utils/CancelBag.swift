@@ -10,7 +10,6 @@ import Combine
 
 public final class CancelBag: @unchecked Sendable {
     
-    
     fileprivate(set) var  subscriptions = Set<AnyCancellable>()
     public init( subscriptions: Set<AnyCancellable> = Set<AnyCancellable>()) {
         self.subscriptions = subscriptions
@@ -19,9 +18,7 @@ public final class CancelBag: @unchecked Sendable {
         subscriptions.removeAll()
     }
 }
-
 public extension AnyCancellable {
-    
     func store(in cancelBag: CancelBag) {
         cancelBag.subscriptions.insert(self)
     }

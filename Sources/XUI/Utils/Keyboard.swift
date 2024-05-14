@@ -9,20 +9,16 @@ import SwiftUI
 import Combine
 
 
-extension View {
-    
-    /// Sets an environment value for keyboardShowing
-    /// Access this in any child view with
-    /// @Environment(\.keyboardShowing) var keyboardShowing
+public extension View {
     func addKeyboardVisibilityToEnvironment() -> some View {
         modifier(KeyboardVisibility())
     }
 }
- struct KeyboardShowingEnvironmentKey: EnvironmentKey {
-    static let defaultValue: Bool = false
+public struct KeyboardShowingEnvironmentKey: EnvironmentKey {
+    public static let defaultValue: Bool = false
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
     var keyboardShowing: Bool {
         get { self[KeyboardShowingEnvironmentKey.self] }
         set { self[KeyboardShowingEnvironmentKey.self] = newValue }

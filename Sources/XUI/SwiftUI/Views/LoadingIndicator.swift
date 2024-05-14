@@ -8,24 +8,14 @@
 import SwiftUI
 
 public struct LoadingIndicator: View {
-    
-    @State private var isLoading = false
-    private let size: CGFloat
-    
-    public init(size: CGFloat = UIFont.preferredFont(forTextStyle:  .title2).lineHeight) {
-        self.size = size
-    }
+    private let size = UIFont.preferredFont(forTextStyle:  .title3).lineHeight
+    public init() {}
     public var body: some View {
-        Circle()
-            .trim(from: 0, to: 0.85)
-            .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .butt, lineJoin: .round))
-            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-            .animation(.linear(duration: 0.9).repeatForever(autoreverses: false), value: isLoading)
-            .frame(square: size)
-            .fixedSize()
-            .task {
-                self.isLoading = true
-            }
+        SystemImage(.circle, size)
+            .foregroundStyle(Color.link.gradient)
+            .padding(4)
+            .zIndex(5)
+            .phaseAnimation([.scale(0.8), .scale(1.2)])
     }
 }
 
@@ -33,7 +23,7 @@ private struct LoadingViewModifier: ViewModifier {
     var loading: Bool
     public func body(content: Content) -> some View {
         content
-            .overlay {
+            .overlay(alignment: .top) {
                 if loading {
                     LoadingIndicator()
                 }
