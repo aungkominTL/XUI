@@ -46,7 +46,7 @@ public struct PagerView<Content: View>: View {
             }
             .offset(x: -CGFloat(self.currentFloatIndex) * geometry.size.width)
             .offset(x: self.offsetX)
-            .animation(.linear, value: offsetX)
+            .animation(.easeInOut, value: offsetX)
             .highPriorityGesture(
                 DragGesture().updating($offsetX) { value, state, _ in
                     state = value.translation.width
@@ -65,7 +65,7 @@ public struct PagerView<Content: View>: View {
                     }
                 }
             )
-            .animation(.easeInOut, value: currentFloatIndex)
+            .animation(.easeIn, value: currentFloatIndex)
         }
         .onChange(of: currentIndex) { value in
             currentFloatIndex = CGFloat(value)

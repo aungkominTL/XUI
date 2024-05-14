@@ -8,7 +8,6 @@
 import SwiftUI
 
 private struct Synchronizer<Value: Equatable>: ViewModifier {
-    
     var original: Binding<Value>
     var changed: Binding<Value>
     

@@ -8,10 +8,10 @@
 import SwiftUI
 
 public struct LoadingIndicator: View {
-
+    
     @State private var isLoading = false
     private let size: CGFloat
-
+    
     public init(size: CGFloat = UIFont.preferredFont(forTextStyle:  .title2).lineHeight) {
         self.size = size
     }
@@ -30,11 +30,11 @@ public struct LoadingIndicator: View {
 }
 
 private struct LoadingViewModifier: ViewModifier {
-    var loading: Binding<Bool>
+    var loading: Bool
     public func body(content: Content) -> some View {
         content
             .overlay {
-                if loading.wrappedValue {
+                if loading {
                     LoadingIndicator()
                 }
             }
@@ -42,7 +42,7 @@ private struct LoadingViewModifier: ViewModifier {
 }
 
 public extension View {
-    func showLoading(_ isLoading: Binding<Bool>) -> some View {
+    func showLoading(_ isLoading: Bool) -> some View {
         modifier(LoadingViewModifier(loading: isLoading))
     }
 }

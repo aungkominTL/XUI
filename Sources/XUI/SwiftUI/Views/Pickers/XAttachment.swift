@@ -13,7 +13,7 @@ public struct XAttachment: Hashable, Codable, Identifiable, Sendable {
         case photo, video
     }
 
-    public var id: String { url }
+    public var id: String = UUID().uuidString
     public var url: String
     public var type: XAttachmentKind
     public var _url: URL? { URL(string: url) }
