@@ -11,11 +11,11 @@ public struct LoadingIndicator: View {
     private let size = UIFont.preferredFont(forTextStyle:  .title3).lineHeight
     public init() {}
     public var body: some View {
-        SystemImage(.circle, size)
-            .foregroundStyle(Color.link.gradient)
+        SystemImage(.circleFill, size)
+            .foregroundStyle(Color.secondary.gradient)
             .padding(4)
             .zIndex(5)
-            .phaseAnimation([.scale(0.8), .scale(1.2)])
+            .phaseAnimation([.scale(0.3), .scale(1.2)])
     }
 }
 
@@ -23,9 +23,14 @@ private struct LoadingViewModifier: ViewModifier {
     var loading: Bool
     public func body(content: Content) -> some View {
         content
-            .overlay(alignment: .top) {
+            .redacted(reason: loading ? .placeholder : [])
+            .overlay(alignment: .center) {
                 if loading {
-                    LoadingIndicator()
+                    ZStack {
+                        Color.clear
+                        LoadingIndicator()
+                    }
+                    .ignoresSafeArea(.all)
                 }
             }
     }

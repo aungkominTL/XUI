@@ -41,7 +41,7 @@ public extension View {
 }
 
 public extension View {
-    static var typeName: String { String(describing: self) }
+    static var typeName: String { String(describing: self).lowercased() }
 }
 
 public extension AnyView {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension Int: Identifiable {
     public var id: Int { self }
@@ -44,5 +45,16 @@ public extension Float {
     }
     var cgFloat: CGFloat {
         CGFloat(self)
+    }
+}
+
+public extension CGFloat {
+    var scaled: CGFloat {
+        UIFontMetrics.default.scaledValue(for: self)
+    }
+}
+public extension Int {
+    var scaled: CGFloat {
+        UIFontMetrics.default.scaledValue(for: self.cgFloat)
     }
 }

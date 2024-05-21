@@ -84,13 +84,13 @@ private struct XPickerView<Item: XPickable>: View {
                     Text("total \(items.count) items")
                 }
             }
-            ._onAppear(after: 0.5) {
+            ._onAppear(after: 0.2) {
                 scrollToSelectedItem(scrollView)
             }
-            .navigationBarTitle(title, displayMode: .large)
-            .navigationBarItems(trailing: trailingItem)
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
         }
+        .navigationBarTitle(title, displayMode: .large)
+        .navigationBarItems(trailing: trailingItem)
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
     }
     
     private var trailingItem: some View {

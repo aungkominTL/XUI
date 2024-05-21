@@ -26,7 +26,7 @@ struct DelegateHolder<Content: View>: View {
             .introspect(.scrollView, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { scrollView in
                 scrollView.delegate = offsetNotifier
                 offsetNotifier.scrollView = scrollView
-                offsetNotifier.scrollViewDidScroll(scrollView)
+                offsetNotifier.scrollViewDidEndDecelerating(scrollView)
             }
     }
 }
@@ -55,10 +55,11 @@ class ScrollOffsetNotifier: NSObject, UIScrollViewDelegate, ObservableObject {
         guard let scrollView = object as? UIScrollView else {
             return
         }
-        
         scrollViewDidScroll(scrollView)
     }
-    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+    }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let triggerHeight: CGFloat
         

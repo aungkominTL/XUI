@@ -27,6 +27,6 @@ public struct XPhotoPageControl: View {
                     .frame(square: isSelected ? size/2 : size)
             }
         }
-        .animation(.interactiveSpring(), value: selection.wrappedValue)
+        .animation(.bouncy, value: selection.wrappedValue)
     }
 }

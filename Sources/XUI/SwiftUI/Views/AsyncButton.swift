@@ -34,7 +34,7 @@ public struct AsyncButton<Label: View>: View {
         self.isDisabled = isDisabled
         self.showProgressView = showProgressView
     }
-
+    
     public var body: some View {
         Button {
             Task {

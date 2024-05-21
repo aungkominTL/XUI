@@ -33,7 +33,6 @@ public struct ScrollViewWithOffsetTracker<Content: View>: View {
                 content()
             }
         }
-        .scrollContentBackground(.visible)
         .withScrollOffsetTracking(action: onScroll)
     }
 }

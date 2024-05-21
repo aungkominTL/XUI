@@ -60,7 +60,7 @@ public struct LinkButton<Label: View>: View {
     @ViewBuilder
     private func whatsappButton(phone: String, msg: String) -> some View {
         let url: URL? = {
-            let urlWhats = "whatsapp://send?phone=\(phone)&text=\(msg)"
+            let urlWhats = "whatsapp://send?phone=\(phone.withoutSpacesAndNewLines)&text=\(msg)"
             var characterSet = CharacterSet.urlQueryAllowed
             characterSet.insert(charactersIn: "?&")
             guard let urlString = urlWhats.addingPercentEncoding(withAllowedCharacters: characterSet),

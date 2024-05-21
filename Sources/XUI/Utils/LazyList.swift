@@ -154,7 +154,7 @@ extension LazyList: CustomStringConvertible {
 
 public extension RandomAccessCollection {
     var lazyList: LazyList<Element> {
-        return .init(count: self.count, useCache: false) {
+        return .init(count: self.count, useCache: true) {
             guard $0 < self.count else { return nil }
             let index = self.index(self.startIndex, offsetBy: $0)
             return self[index]

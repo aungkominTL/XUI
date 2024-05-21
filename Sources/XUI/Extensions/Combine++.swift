@@ -18,10 +18,10 @@ public extension Publisher where Self.Failure == Never {
 }
 
 public extension AnyPublisher {
-    public enum AsyncError: Error {
+    enum AsyncError: Error {
         case finishedWithoutValue
     }
-    public func async() async throws -> Output {
+    func async() async throws -> Output {
         try await withCheckedThrowingContinuation { continuation in
             var cancellable: AnyCancellable?
             var finishedWithoutValue = true

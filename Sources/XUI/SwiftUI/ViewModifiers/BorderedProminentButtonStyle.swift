@@ -12,8 +12,8 @@ private struct BorderedProminentButtonStyle: ViewModifier {
         HStack {
             content
         }
-        .foregroundStyle(Color.systemBackground)
-        .frame(height: 38)
+        .foregroundStyle(Color.white)
+        .frame(height: 38.scaled)
         ._flexible(.horizontal)
         .background(Color.accentColor.gradient, in: Capsule())
     }
@@ -30,9 +30,10 @@ private struct BorderedProminentLightButtonStyle: ViewModifier {
         HStack {
             content
         }
-        .frame(height: 38)
+        .foregroundStyle(Color.systemBackground)
+        .frame(height: 38.scaled)
         ._flexible(.horizontal)
-        .background(Color(uiColor: .opaqueSeparator).gradient, in: Capsule())
+        .background(Color.secondary.gradient, in: Capsule())
     }
 }
 
@@ -73,11 +74,12 @@ private struct BorderStyle: ViewModifier {
                 .stroke(color, lineWidth: lineWidth)
             content
         }
+        .padding(4.scaled)
     }
 }
 
 public extension View {
-    func _borderStyle(_ color: Color = .secondary, _ lineWidth: CGFloat = 1) -> some View {
+    func _borderStyle(_ color: Color = .init(uiColor: .opaqueSeparator), _ lineWidth: CGFloat = 1) -> some View {
         ModifiedContent(content: self, modifier: BorderStyle(color: color, lineWidth: lineWidth))
     }
 }

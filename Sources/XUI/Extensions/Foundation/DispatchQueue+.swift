@@ -16,3 +16,11 @@ public extension DispatchQueue {
         }
     }
 }
+
+public extension DispatchQueue {
+    static func delay(_ time: TimeInterval = 0.5, _ completion: @escaping () -> Void) {
+        Self.main.asyncAfter(deadline: .now() + time) {
+            completion()
+        }
+    }
+}

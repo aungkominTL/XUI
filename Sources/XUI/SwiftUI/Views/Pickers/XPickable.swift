@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol XPickable: Identifiable, Equatable {
+public protocol XPickable: Identifiable, Equatable, Hashable {
     var title: String { get }
 }
 
