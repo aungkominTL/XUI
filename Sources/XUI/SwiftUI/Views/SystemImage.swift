@@ -31,10 +31,6 @@ public struct SystemImage: View {
                     .scaledToFit()
                     .frame(square: value)
             }
-            .if (isRandomColor) { view in
-                view
-                    .foregroundColor(.random(seed: systemName + "com.jonahaung.homeforyou"))
-            }
             .scaledToFit()
     }
     

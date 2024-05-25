@@ -74,7 +74,6 @@ private struct BorderStyle: ViewModifier {
                 .stroke(color, lineWidth: lineWidth)
             content
         }
-        .padding(4.scaled)
     }
 }
 

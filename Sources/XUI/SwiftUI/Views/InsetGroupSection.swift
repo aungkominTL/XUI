@@ -31,7 +31,6 @@ public struct InsetGroupSection<Content: View, Header: View, Footer: View>: View
                 .foregroundStyle(.secondary)
         }
         .padding(outerPadding)
-        .padding(.bottom)
         ._flexible(.horizontal)
     }
 }

@@ -1,6 +1,5 @@
 
 import SwiftUI
-import UIKit
 import SwiftUIIntrospect
 
 public enum OffsetTrigger {

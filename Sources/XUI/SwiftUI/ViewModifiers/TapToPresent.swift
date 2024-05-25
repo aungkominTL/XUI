@@ -22,7 +22,6 @@ private struct PresentSheetModifier<Destination: View>: ViewModifier {
         .buttonStyle(.borderless)
         .sheet(isPresented: $isShown, onDismiss: onDismiss) {
             destination()
-                .xThemeStyle()
         }
     }
 }
@@ -41,7 +40,6 @@ private struct PresentFullScreenModifier<Destination: View>: ViewModifier {
         .buttonStyle(.borderless)
         .fullScreenCover(isPresented: $isShown, onDismiss: onDismiss) {
             destination()
-                .xThemeStyle()
         }
     }
 }

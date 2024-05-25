@@ -5,7 +5,7 @@
 //  Created by Aung Ko Min on 18/7/23.
 //
 
-import UIKit
+import SwiftUI
 
 public extension UIImage {
     

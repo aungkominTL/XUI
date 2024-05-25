@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "XUI",
-    platforms: [.iOS(.v17), .macOS(.v14), .tvOS(.v17)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "XUI", targets: ["XUI"]),
     ],

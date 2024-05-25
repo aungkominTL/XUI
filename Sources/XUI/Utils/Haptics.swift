@@ -5,7 +5,7 @@
 //  Created by Aung Ko Min on 8/2/23.
 //
 
-import UIKit
+import SwiftUI
 import AudioToolbox
 import CoreHaptics
 

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 
 extension Int: Identifiable {
     public var id: Int { self }

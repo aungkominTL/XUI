@@ -11,7 +11,7 @@ public struct _DismissButton: View {
     
     private let isProtected: Bool
     private let title: String
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     
     public init(isProtected: Bool = false, title: String = "Done") {
         self.isProtected = isProtected
@@ -24,15 +24,14 @@ public struct _DismissButton: View {
             Text(.init(title))
                 ._comfirmationDialouge(message: "Are you sure to close?") {
                     Button("Continue to close", role: .destructive) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                 }
-                ._hidable(!presentationMode.wrappedValue.isPresented)
+//                ._hidable(!presentationMode.wrappedValue.isPresented)
         } else {
             Button(.init(title), role: .cancel) {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             }
-            ._hidable(!presentationMode.wrappedValue.isPresented)
         }
     }
 }
