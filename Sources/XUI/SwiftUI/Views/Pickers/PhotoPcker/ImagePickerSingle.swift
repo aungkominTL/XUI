@@ -52,7 +52,7 @@ public final class ImagePickerCoordinator: NSObject, UIImagePickerControllerDele
                     parent.onPicked(attachment)
                 }
             } catch {
-                print(error)
+                Log(error)
             }
         } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
             let attachment = XAttachment(url: videoURL.absoluteString, type: .video)

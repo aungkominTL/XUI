@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Aung Ko Min on 20/2/23.
 //
@@ -42,7 +42,19 @@ public extension View {
         ModifiedContent(content: self, modifier: BorderedProminentLightButtonStyle())
     }
 }
+private struct OverlayLightButtonStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(.init(top: 4, leading: 8, bottom: 4, trailing: 8))
+            .background(.bar, in: Capsule())
+    }
+}
 
+public extension View {
+    func _overlayLightButtonStyle() -> some View {
+        ModifiedContent(content: self, modifier: OverlayLightButtonStyle())
+    }
+}
 private struct NavigationLinkStyle: ViewModifier {
     func body(content: Content) -> some View {
         HStack(spacing: 0) {

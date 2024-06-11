@@ -40,7 +40,7 @@ public class Debouncer: ObservableObject {
 
     private func deQueue() {
         counter = 0
-        print("deque")
+        Log("deque")
     }
 }
 

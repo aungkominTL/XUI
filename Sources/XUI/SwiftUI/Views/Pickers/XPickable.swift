@@ -17,6 +17,6 @@ extension XPickable {
 
 extension String: XPickable {
     public var title: String {
-        self
+        self.replacingOccurrences(of: "_", with: " ").capitalized
     }
 }

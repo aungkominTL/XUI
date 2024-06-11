@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct XAttachment: Hashable, Codable, Identifiable, Sendable {
+public struct XAttachment: Hashable, Codable, Identifiable, Sendable, Equatable {
 
     public enum XAttachmentKind: String, Codable, CaseIterable, Sendable {
         case photo, video

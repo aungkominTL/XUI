@@ -11,7 +11,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "4.1.1"),
-        .package(url: "https://github.com/kean/NukeUI", from: "0.8.3"),
         .package(url: "https://github.com/siteline/SwiftUI-Introspect.git", from: "0.9.0")
     ],
     targets: [
@@ -19,7 +18,6 @@ let package = Package(
             name: "XUI",
             dependencies: [
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
-                .product(name: "NukeUI", package: "NukeUI"),
                 .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
             ]
         ),

@@ -24,7 +24,6 @@ where Data : RandomAccessCollection,
     var body: some View {
         ForEach(data, id: id) { element in
             let size = itemSize(element)
-            
             content(element)
                 .frame(width: axis == .vertical ? size : nil, height: axis == .horizontal ? size : nil)
         }

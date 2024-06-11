@@ -12,13 +12,13 @@ public struct AsyncButton<Label: View>: View {
     let action: AsyncAction
     var onFinish: AsyncAction?
     var onError: ((Error) -> Void)?
-
+    
     @ViewBuilder var label: () -> Label
-
+    
     private var delay: Double = 0.2
     @State private var isDisabled = false
     @State private var showProgressView = false
-
+    
     public init(
         actionOptions: Set<ActionOption> = [.disableButton],
         action: @escaping AsyncAction,
@@ -41,6 +41,7 @@ public struct AsyncButton<Label: View>: View {
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
                 }
+                _Haptics.play(.soft)
                 var progressViewTask: Task<Void, Error>?
                 if actionOptions.contains(.showProgressView) {
                     progressViewTask = Task { @MainActor in
@@ -68,7 +69,7 @@ public struct AsyncButton<Label: View>: View {
             }
         } label: {
             label()
-                .opacity(showProgressView ? 0.01 : 1)
+                .opacity(showProgressView ? 0.3 : isDisabled ? 0.3 : 1)
                 .overlay {
                     if showProgressView {
                         ProgressView()

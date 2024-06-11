@@ -97,7 +97,7 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
                     try await loadPhotos(results: results)
 //                    parent.dismiss()
                 } catch {
-                    print(error)
+                    Log(error)
                 }
             }
         }

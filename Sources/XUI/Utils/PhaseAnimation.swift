@@ -18,6 +18,7 @@ private struct PhaseAnimationModifier: ViewModifier {
                         view
                             .scaleEffect(phase.scale)
                             .rotationEffect(phase.angle)
+                            .offset(x: phase.size.x, y: phase.size.y)
                     }
             } else {
                 content
@@ -41,6 +42,7 @@ public enum PhaseAnimationType: Hashable {
     case idle
     case scale(CGFloat)
     case rotate(Double)
+    case transition(x: Double, y: Double)
     
     var scale: CGFloat {
         switch self {
@@ -56,6 +58,14 @@ public enum PhaseAnimationType: Hashable {
             return .degrees(value)
         default:
             return .zero
+        }
+    }
+    var size: (x: Double, y: Double) {
+        switch self {
+        case .transition(let value):
+            return value
+        default:
+            return (0, 0)
         }
     }
 }

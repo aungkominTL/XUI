@@ -9,15 +9,11 @@ import Foundation
 import SwiftUI
 
 public extension View {
-    /**
-     Add this modifier to any `ScrollView`, `List` or custom
-     view that uses ``ScrollViewOffsetTracker`` to track its
-     scroll offset.
-     */
-    func withScrollOffsetTracking(
+    func scrollViewOffset(
+        namespace: String,
         action: @escaping (_ offset: CGPoint) -> Void
     ) -> some View {
-        self.coordinateSpace(name: ScrollOffsetNamespace.namespace)
+        self.coordinateSpace(name: namespace)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self, perform: action)
     }
 }

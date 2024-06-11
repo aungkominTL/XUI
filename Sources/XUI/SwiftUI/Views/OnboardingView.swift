@@ -33,8 +33,8 @@ public struct OnboardingItem: Identifiable, Hashable {
 }
 
 public struct OnboardingView: View {
-
-    @State private var current = 0
+    
+    @State private var selection = 0
     private let items: [OnboardingItem]
     private let onClose: (() -> Void)?
     @Environment(\.dismiss) private var dismiss
@@ -45,7 +45,7 @@ public struct OnboardingView: View {
     }
     
     public var body: some View {
-        TabView(selection: $current) {
+        TabView(selection: $selection) {
             ForEach(0..<items.count, id: \.self) { i in
                 if let item = items[safe: i] {
                     OnboardingCell(item: item, index: i)
@@ -53,10 +53,10 @@ public struct OnboardingView: View {
                 }
             }
         }
-        .animation(.snappy, value: current)
+        .animation(.snappy, value: selection)
         .overlay(overlayView)
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .ignoresSafeArea(.container, edges: .vertical)
+        .ignoresSafeArea(edges: .all)
         .statusBarHidden(true)
     }
     
@@ -68,8 +68,7 @@ public struct OnboardingView: View {
                     Button {
                         skip()
                     } label: {
-                        Image(systemName: "chevron.forward.2")
-                            .imageScale(.large)
+                        Text("Skip")
                             .padding()
                     }
                 }
@@ -77,13 +76,16 @@ public struct OnboardingView: View {
             Spacer()
             HStack {
                 if self.hasNext {
+                    XPhotoPageControl(selection: $selection, length: items.count, size: 13)
+                        .foregroundStyle(.secondary)
+                    Spacer()
                     Button {
                         next()
                     } label: {
-                        Image(systemName: "arrowshape.right.fill")
-                            .imageScale(.large)
+                        SystemImage(.arrowshapeRightFill, 30)
                             .padding()
                     }
+                    .phaseAnimation([.idle, .scale(1.5)], selection%2 == 0)
                 } else {
                     let hasShownOnboarding = Onboarding.hasShown
                     Button {
@@ -101,23 +103,23 @@ public struct OnboardingView: View {
         .padding()
     }
     
-    private var hasNext: Bool { current+1 < items.count  }
-    private var hasPrevious: Bool { current > 0 }
+    private var hasNext: Bool { selection+1 < items.count  }
+    private var hasPrevious: Bool { selection > 0 }
     
     private func next() {
         if hasNext  {
-            current += 1
+            selection += 1
         }
     }
     
     private func previous() {
         if hasPrevious {
-            current -= 1
+            selection -= 1
         }
     }
     private func skip() {
         if hasNext {
-            current = items.count-1
+            selection = items.count-1
         }
     }
 }
@@ -127,16 +129,29 @@ private struct OnboardingCell: View {
     let index: Int
     var body: some View {
         GeometryReader { geo in
-            StickyHeaderScrollView(header: {
-                StickyHeaderImage(Image(item.imageName))
-            }, headerHeight: geo.size.height/2.5) {
-                VStack {
+            let height = geo.size.height/2
+            StretchyHeaderScrollView(namespace: "onboarding", headerHeight: height, multipliter: 1) {
+                VStack(alignment: .leading) {
+                    ZStack {
+                        Color.clear
+                    }
+                    .frame(height: height)
                     Text(item.title)
                         .font(.title)
                     Text(item.subtitle)
                         .font(.body)
+                    Spacer(minLength: 100)
                 }
                 .padding()
-            }}
+            } header: {
+                Image(item.imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: height)
+                    .ignoresSafeArea()
+            }
+            .ignoresSafeArea()
+        }
+        
     }
 }

@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-public struct EquatableVIew<Content: View, Value: Equatable>: Equatable, View {
+public struct EqualableView<Content: View, Value: Equatable>: Equatable, View {
+    
     public let content: Content
     public let value: Value
     
@@ -21,8 +22,8 @@ public struct EquatableVIew<Content: View, Value: Equatable>: Equatable, View {
 
 public extension View {
     /// Prevents the view from updating its child view when its new given value is the same as its old given value.
-    func equatable<V: Equatable>(by value: V) -> some View {
-        EquatableVIew(content: self, value: value)
+    func equatable<Value: Equatable>(by value: Value) -> some View {
+        EqualableView(content: self, value: value)
             .equatable()
     }
 }

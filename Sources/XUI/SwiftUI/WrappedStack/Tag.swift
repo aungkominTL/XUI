@@ -23,6 +23,7 @@ public struct _Tag<Content>: View where Content: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             ._borderStyle(color)
+            .frame(height: 25)
         
     }
 }

@@ -27,7 +27,7 @@ private struct SplashView<SplashContent: View>: ViewModifier {
                         try await Task.sleep(for: .seconds(timeout))
                         isActive = false
                     } catch {
-                        print(error)
+                        Log(error)
                     }
                 }
         } else {

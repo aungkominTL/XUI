@@ -45,6 +45,7 @@ private struct XPickerView<Item: XPickable>: View {
     @Binding var pickedItem: Item
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
+    @State private var isPresented = false
     private var currentItems: [Item] {
         searchText.isEmpty ? items : items.filter{ $0.title.lowercased().contains(searchText.lowercased())}
     }
@@ -59,11 +60,8 @@ private struct XPickerView<Item: XPickable>: View {
                                 let isSelected = item.title == pickedItem.title
                                 SystemImage(isSelected ? .checkmark : .circle)
                                     .symbolVariant(isSelected ? .circle.fill : .none)
-                                    .symbolRenderingMode(.multicolor)
-                                    .foregroundColor(isSelected ? .green : Color(uiColor: .quaternaryLabel))
+                                    .foregroundColor(isSelected ? .green : Color.quaternaryLabel)
                                     .imageScale(.large)
-                                    .padding(.trailing, 3)
-                                
                                 AsyncButton(actionOptions: [.disableButton]) {
                                     update(item)
                                     try await Task.sleep(for: .seconds(0.2))
@@ -80,24 +78,28 @@ private struct XPickerView<Item: XPickable>: View {
                             }
                         }
                     }
+                    if currentItems.isEmpty {
+                        ContentUnavailableView.search
+                    }
                 } footer: {
                     Text("total \(items.count) items")
                 }
             }
-            ._onAppear(after: 0.2) {
+            ._onAppear(after: 1) {
                 scrollToSelectedItem(scrollView)
             }
         }
         .navigationBarTitle(title, displayMode: .large)
         .navigationBarItems(trailing: trailingItem)
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search \(title)")
+        .searchable(text: $searchText, isPresented: $isPresented, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Search \(title)")
     }
     
     private var trailingItem: some View {
-        Button("Clear") {
-            clearItem()
+        AsyncButton {
+            isPresented = true
+        } label: {
+            SystemImage(.magnifyingglass)
         }
-        .disabled(pickedItem.isEmpty)
     }
     
     private func scrollToSelectedItem(_ scrollView: ScrollViewProxy) {
@@ -107,19 +109,11 @@ private struct XPickerView<Item: XPickable>: View {
             }
         }
     }
-    private func clearItem() {
-        let empty = items.filter { $0.isEmpty }.first
-        if let empty {
-            pickedItem = empty
-        }
-    }
     
     @MainActor private func update(_ item: Item) {
         if pickedItem.title == item.title {
-            clearItem()
             return
         }
         pickedItem = item
-        
     }
 }

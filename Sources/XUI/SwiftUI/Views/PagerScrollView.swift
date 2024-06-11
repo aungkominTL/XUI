@@ -35,7 +35,7 @@ public struct PagerScrollView<PageItems, ID, Content>: View where PageItems: Ran
     public var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { scroll in
-                ScrollViewWithOffsetTracker(.horizontal, showsIndicators: false) { offset in
+                ScrollViewWithOffsetTracker(.horizontal, showsIndicators: false, namespace: Self.typeName) { offset in
                     let count = model.ranges.count
                     let viewWidth = Int(geometry.size.width)
                     let totalWidth = viewWidth * count

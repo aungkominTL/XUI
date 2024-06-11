@@ -12,13 +12,13 @@ public struct InsetGroupSection<Content: View, Header: View, Footer: View>: View
     @ViewBuilder private var content: () -> Content
     @ViewBuilder private var header: (() -> Header)
     @ViewBuilder private var footer: (() -> Footer)
-    private let outerPadding: CGFloat
+    private let padding: CGFloat
     
-    public init(_ outerPadding: CGFloat = 2, content: @escaping () -> Content, @ViewBuilder header: @escaping (() -> Header) = { Group {} }, @ViewBuilder footer: @escaping (() -> Footer) = { Group {} }) {
+    public init(_ padding: CGFloat = 0, content: @escaping () -> Content, @ViewBuilder header: @escaping (() -> Header) = { Group {} }, @ViewBuilder footer: @escaping (() -> Footer) = { Group {} }) {
         self.content = content
         self.header = header
         self.footer = footer
-        self.outerPadding = UIFontMetrics.default.scaledValue(for: outerPadding)
+        self.padding = padding.scaled
     }
     
     public var body: some View {
@@ -30,7 +30,7 @@ public struct InsetGroupSection<Content: View, Header: View, Footer: View>: View
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        .padding(outerPadding)
+        .padding(padding)
         ._flexible(.horizontal)
     }
 }

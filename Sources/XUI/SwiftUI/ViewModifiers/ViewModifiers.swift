@@ -1,64 +1,56 @@
 //
-//  ViewModifiers.swift
-//  EhPanda
+//  Synchronizer.swift
+//  HomeForYou
 //
-//  Created by 荒木辰造 on R 2/12/06.
+//  Created by Aung Ko Min on 24/4/23.
 //
 
 import SwiftUI
+import Combine
 
-private struct Synchronizer<Value: Equatable>: ViewModifier {
-    var original: Binding<Value>
-    var changed: Binding<Value>
+private struct LazySynchronizer<Value: Equatable>: ViewModifier {
+    
+    @Binding var original: Value
+    @Binding var changed: Value
     
     func body(content: Content) -> some View {
         content
             .onAppear {
-                changed.wrappedValue = original.wrappedValue
+                changed = original
             }
             .onDisappear {
-                original.wrappedValue = changed.wrappedValue
+                original = changed
             }
     }
 }
-
-public extension View {
-    func synchronizeLazily<Value: Equatable>(_ original: Binding<Value>, _ changed: Binding<Value>) -> some View {
-        ModifiedContent(content: self, modifier: Synchronizer(original: original, changed: changed))
+private struct DebounceSync<Value: Equatable>: ViewModifier {
+    
+    @Binding var original: Value
+    @Binding var changed: Value
+    let seconds: Double
+    
+    private let publisher = PassthroughSubject<Value, Never>()
+    
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: changed) { oldValue, newValue in
+                publisher.send(changed)
+            }
+            .onReceive (
+                publisher
+                    .removeDuplicates()
+                    .debounce(for: .seconds(seconds), scheduler: RunLoop.main)
+            ) {
+                original = $0
+                Log($0)
+            }
     }
 }
-
-
 public extension View {
-
-    @ViewBuilder func withHorizontalSpacing(width: CGFloat = 8, height: CGFloat? = nil) -> some View {
-        Color.clear.frame(width: width, height: height)
-        self
-        Color.clear.frame(width: width, height: height)
+    func debounceSync<Value: Equatable>(_ original: Binding<Value>, _ changed: Binding<Value>, _ seconds: Double = 0.5) -> some View {
+        ModifiedContent(content: self, modifier: DebounceSync(original: original, changed: changed, seconds: seconds))
     }
-
-    func autoBlur(radius: Double) -> some View {
-        blur(radius: radius)
-            .allowsHitTesting(radius < 1)
-            .animation(.linear(duration: 0.1), value: radius)
-    }
-
-    func synchronize<Value: Equatable>(_ first: Binding<Value>, _ second: Binding<Value>) -> some View {
-        self
-            .onChange(of: first.wrappedValue) { newValue in
-                second.wrappedValue = newValue
-            }
-            .onChange(of: second.wrappedValue) { newValue in
-                first.wrappedValue = newValue
-            }
-    }
-    func synchronize<Value: Equatable>(_ first: Binding<Value>, _ second: FocusState<Value>.Binding) -> some View {
-        self
-            .onChange(of: first.wrappedValue) { newValue in
-                second.wrappedValue = newValue
-            }
-            .onChange(of: second.wrappedValue) { newValue in
-                first.wrappedValue = newValue
-            }
+    func lazySync<Value: Equatable>(_ original: Binding<Value>, _ changed: Binding<Value>) -> some View {
+        ModifiedContent(content: self, modifier: LazySynchronizer(original: original, changed: changed))
     }
 }

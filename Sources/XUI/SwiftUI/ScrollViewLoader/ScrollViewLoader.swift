@@ -61,7 +61,6 @@ class ScrollOffsetNotifier: NSObject, UIScrollViewDelegate, ObservableObject {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let triggerHeight: CGFloat
-        
         switch trigger {
         case let .absolute(offset):
             triggerHeight = offset
