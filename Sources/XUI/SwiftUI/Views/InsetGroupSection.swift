@@ -22,16 +22,18 @@ public struct InsetGroupSection<Content: View, Header: View, Footer: View>: View
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            header()
-                .font(.subheadline)
-            content()
-            footer()
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        Section {
+            VStack(alignment: .leading, spacing: 6) {
+                header()
+                    .font(.subheadline)
+                content()
+                footer()
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(padding)
+            ._flexible(.horizontal)
         }
-        .padding(padding)
-        ._flexible(.horizontal)
     }
 }
 struct TableCellStyle: ViewModifier {

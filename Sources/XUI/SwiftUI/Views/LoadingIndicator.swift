@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 public struct LoadingIndicator: View {
     public init() {}
     public var body: some View {
@@ -16,16 +17,18 @@ public struct LoadingIndicator: View {
 }
 
 private struct LoadingViewModifier: ViewModifier {
+    
     let isLoading: Bool
-    public func body(content: Content) -> some View {
-        content
-            .allowsHitTesting(!isLoading)
-            .overlay(alignment: .center) {
-                if isLoading {
-                    LoadingIndicator()
-                }
+    func body(content: Content) -> some View {
+        Group {
+            if isLoading {
+                LoadingIndicator()
             }
-            .animation(.default, value: isLoading)
+            content
+                .allowsHitTesting(!isLoading)
+                
+        }
+        .equatable(by: isLoading)
     }
 }
 
