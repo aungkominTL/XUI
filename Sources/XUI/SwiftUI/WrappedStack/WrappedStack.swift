@@ -28,7 +28,7 @@ where Content : View
                     GeometryReader { geometry in
                         Color.clear
                             .onAppear { contentSize = geometry.size }
-                            .onChange(of: geometry.size) { newValue in
+                            .onChange(of: geometry.size, initial: true) { (oldValue, newValue) in
                                 DispatchQueue.main.async {
                                     withTransaction(transaction) {
                                         contentSize = newValue

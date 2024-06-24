@@ -68,8 +68,8 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
                     parent.attachments.append(firstItem)
                     continue
                 }
-                
-                let item = try await result.itemProvider.loadPhoto()
+                let itemProvider = result.itemProvider
+                let item = try await itemProvider.loadPhoto()
                 switch item {
                 case let uiImage as UIImage:
                     do {
