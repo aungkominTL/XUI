@@ -30,6 +30,7 @@ private struct DebounceSync<Value: Equatable>: ViewModifier {
     let seconds: Double
     
     private let publisher = PassthroughSubject<Value, Never>()
+    private let reversePublisher = PassthroughSubject<Value, Never>()
     
     func body(content: Content) -> some View {
         content
@@ -42,7 +43,16 @@ private struct DebounceSync<Value: Equatable>: ViewModifier {
                     .debounce(for: .seconds(seconds), scheduler: RunLoop.main)
             ) {
                 original = $0
-                Log($0)
+            }
+            .onChange(of: original) { oldValue, newValue in
+                reversePublisher.send(newValue)
+            }
+            .onReceive (
+                reversePublisher
+                    .removeDuplicates()
+                    .debounce(for: .seconds(seconds), scheduler: RunLoop.main)
+            ) {
+                changed = $0
             }
     }
 }

@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Aung Ko Min on 6/8/23.
 //
@@ -25,19 +25,8 @@ public extension EnvironmentValues {
     }
 }
 
-private struct KeyboardVisibility:ViewModifier {
-    
-#if os(macOS)
-    
-    fileprivate func body(content: Content) -> some View {
-        content
-            .environment(\.keyboardShowing, false)
-    }
-    
-#else
-    
+private struct KeyboardVisibility: ViewModifier {
     @State var isKeyboardShowing:Bool = false
-    
     private var keyboardPublisher: AnyPublisher<Bool, Never> {
         Publishers
             .Merge(
@@ -60,6 +49,4 @@ private struct KeyboardVisibility:ViewModifier {
                 isKeyboardShowing = value
             }
     }
-    
-#endif
 }

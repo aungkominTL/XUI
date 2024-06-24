@@ -8,9 +8,10 @@
 import Combine
 
 public extension Publisher where Self.Failure == Never {
-    func sink(receiveValue: @escaping ((Self.Output) async -> Void)) -> AnyCancellable {
+    func asyncSink(receiveValue: @escaping (@Sendable (Self.Output) async -> Void)) -> AnyCancellable {
         sink { value in
             Task {
+                guard !Task.isCancelled else { return }
                 await receiveValue(value)
             }
         }
@@ -26,7 +27,7 @@ public extension AnyPublisher {
             var cancellable: AnyCancellable?
             var finishedWithoutValue = true
             cancellable = first()
-                .sink { result in
+                .sink { [unowned cancellable] result in
                     switch result {
                     case .finished:
                         if finishedWithoutValue {

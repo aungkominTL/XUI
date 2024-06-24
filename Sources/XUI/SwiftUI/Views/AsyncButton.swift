@@ -7,7 +7,9 @@
 
 import SwiftUI
 public typealias AsyncAction = (@MainActor @Sendable() async throws -> Void)
+
 public struct AsyncButton<Label: View>: View {
+    
     var actionOptions = Set(ActionOption.allCases)
     let action: AsyncAction
     var onFinish: AsyncAction?
@@ -35,13 +37,16 @@ public struct AsyncButton<Label: View>: View {
         self.showProgressView = showProgressView
     }
     
+    @State private var debouncedTask: Task<Void, Never>?
+    
     public var body: some View {
         Button {
-            Task {
+            debouncedTask?.cancel()
+            debouncedTask = Task {
+                if Task.isCancelled { return }
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true
                 }
-                _Haptics.play(.soft)
                 var progressViewTask: Task<Void, Error>?
                 if actionOptions.contains(.showProgressView) {
                     progressViewTask = Task { @MainActor in
@@ -50,12 +55,16 @@ public struct AsyncButton<Label: View>: View {
                     }
                 }
                 do {
-                    try await Task.sleep(for: .seconds(delay))
                     if Task.isCancelled { return }
+                    _Haptics.play(.light)
                     try await action()
                     progressViewTask?.cancel()
-                    showProgressView = false
-                    isDisabled = false
+                    if actionOptions.contains(.showProgressView) {
+                        showProgressView = false
+                    }
+                    if actionOptions.contains(.disableButton) {
+                        isDisabled = false
+                    }
                     if let onFinish {
                         if Task.isCancelled { return }
                         try await onFinish()

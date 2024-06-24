@@ -11,7 +11,7 @@ import SwiftUI
 public extension View {
     func scrollViewOffset(
         namespace: String,
-        action: @escaping (_ offset: CGPoint) -> Void
+        action: @Sendable @escaping (_ offset: CGPoint) -> Void
     ) -> some View {
         self.coordinateSpace(name: namespace)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self, perform: action)

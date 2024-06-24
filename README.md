@@ -22,5 +22,6 @@ Useful helper classes and extentions Library for SwiftUI
 - Number TextField
 - EULA
 - Auto Wrap
+- Async Image Loading
 
 etc....

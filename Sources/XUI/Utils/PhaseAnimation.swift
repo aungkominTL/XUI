@@ -9,39 +9,62 @@ import SwiftUI
 
 private struct PhaseAnimationModifier: ViewModifier {
     let phases: [PhaseAnimationType]
-    let trigger: Bool?
+    let trigger: String?
     func body(content: Content) -> some View {
-        if let trigger {
-            if #available(iOS 17.0, *) {
+        if phases.isEmpty {
+            content
+        } else {
+            if let trigger {
                 content
-                    .phaseAnimator(phases, trigger: trigger) { view, phase in
+                    .phaseAnimator(phases, trigger: trigger, content: { view, phase in
                         view
                             .scaleEffect(phase.scale)
                             .rotationEffect(phase.angle)
                             .offset(x: phase.size.x, y: phase.size.y)
-                    }
+                    }, animation: { phase in
+                        switch phase {
+                        case .rotate(_):
+                            return .easeInOut(duration: 0.8)
+                        case .scale(let scale):
+                            return .easeInOut(duration: 1/scale)
+                        case .transition(_, _):
+                            return .linear(duration: 1)
+                        }
+                    })
             } else {
                 content
-            }
-        } else {
-            if #available(iOS 17.0, *) {
-                content
-                    .phaseAnimator(phases) { view, phase in
+                    .phaseAnimator(phases, content: { view, phase in
                         view
                             .scaleEffect(phase.scale)
                             .rotationEffect(phase.angle)
-                    }
-            } else {
-                content
+                            .offset(x: phase.size.x, y: phase.size.y)
+                    }, animation: { phase in
+                        switch phase {
+                        case .rotate(_):
+                            return .linear(duration: 0.8)
+                        case .scale(let scale):
+                            return .linear(duration: 0.5/scale)
+                        case .transition(_, _):
+                            return .linear(duration: 1)
+                        }
+                    })
             }
         }
     }
 }
-
+public enum CardinalPoint: Double, CaseIterable {
+    case north = 0
+    case east = 90
+    case south = 180
+    case west = 270
+    case north_360 = 360
+    
+    // SF Symbol (↗) is 45 degrees rotated, so we substract it to compensate
+    public var angle: Angle { .degrees(self.rawValue - 45.0) }
+}
 public enum PhaseAnimationType: Hashable {
-    case idle
     case scale(CGFloat)
-    case rotate(Double)
+    case rotate(CardinalPoint)
     case transition(x: Double, y: Double)
     
     var scale: CGFloat {
@@ -55,7 +78,7 @@ public enum PhaseAnimationType: Hashable {
     var angle: Angle {
         switch self {
         case .rotate(let value):
-            return .degrees(value)
+            return value.angle
         default:
             return .zero
         }
@@ -70,7 +93,7 @@ public enum PhaseAnimationType: Hashable {
     }
 }
 public extension View {
-    func phaseAnimation(_ phases: [PhaseAnimationType], _ trigger: Bool? = nil) -> some View {
+    func phaseAnimation(_ phases: [PhaseAnimationType], _ trigger: String? = nil) -> some View {
         ModifiedContent(content: self, modifier: PhaseAnimationModifier(phases: phases, trigger: trigger))
     }
 }

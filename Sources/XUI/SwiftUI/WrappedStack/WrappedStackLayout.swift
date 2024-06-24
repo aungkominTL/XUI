@@ -7,8 +7,7 @@
 import SwiftUI
 
 internal struct WrappedStackLayout<Content>: View
-where Content : View
-{
+where Content : View {
     var alignment: Alignment
     var axis: Axis
     var content: () -> Content

@@ -27,14 +27,10 @@ public struct XNavPickerBar<Item: XPickable>: View {
             Text(selection.wrappedValue.title)
         }
         .padding(.trailing)
-        .overlay {
-            NavigationLink {
-                XPickerView(title: title, items: items, pickedItem: selection)
-            } label: {
-                EmptyView()
-            }
-            .buttonStyle(.plain)
+        ._tapToPush {
+            XPickerView(title: title, items: items.filter{ $0.title != "Any" && $0.title != "" }, pickedItem: selection)
         }
+        .buttonStyle(.plain)
     }
 }
 
@@ -54,28 +50,25 @@ private struct XPickerView<Item: XPickable>: View {
         ScrollViewReader { scrollView in
             List {
                 Section {
-                    ForEach(currentItems, id: \.title) { item in
-                        if !item.isEmpty {
-                            HStack {
-                                let isSelected = item.title == pickedItem.title
-                                SystemImage(isSelected ? .checkmark : .circle)
-                                    .symbolVariant(isSelected ? .circle.fill : .none)
-                                    .foregroundColor(isSelected ? .green : Color.quaternaryLabel)
-                                    .imageScale(.large)
-                                AsyncButton(actionOptions: [.disableButton]) {
-                                    update(item)
-                                    try await Task.sleep(for: .seconds(0.2))
-                                } label: {
-                                    HStack {
-                                        Text(item.title)
-                                            .foregroundColor(.primary)
-                                        Spacer()
-                                    }
-                                } onFinish: {
-                                    dismiss()
+                    ForEach(currentItems) { item in
+                        HStack {
+                            let isSelected = item.title == pickedItem.title
+                            SystemImage(isSelected ? .checkmark : .circle)
+                                .symbolVariant(isSelected ? .circle.fill : .none)
+                                .foregroundColor(isSelected ? .green : Color.quaternaryLabel)
+                            AsyncButton(actionOptions: [.disableButton]) {
+                                update(item)
+                                try await Task.sleep(for: .seconds(0.15))
+                            } label: {
+                                HStack {
+                                    Text(item.title)
+                                        .foregroundColor(.primary)
+                                    Spacer()
                                 }
-                                .buttonStyle(.borderless)
+                            } onFinish: {
+                                dismiss()
                             }
+                            .buttonStyle(.borderless)
                         }
                     }
                     if currentItems.isEmpty {
@@ -112,6 +105,7 @@ private struct XPickerView<Item: XPickable>: View {
     
     @MainActor private func update(_ item: Item) {
         if pickedItem.title == item.title {
+            pickedItem = Item.empty
             return
         }
         pickedItem = item

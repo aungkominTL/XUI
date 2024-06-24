@@ -85,7 +85,7 @@ public struct OnboardingView: View {
                         SystemImage(.arrowshapeRightFill, 30)
                             .padding()
                     }
-                    .phaseAnimation([.idle, .scale(1.5)], selection%2 == 0)
+                    .phaseAnimation([.scale(0.9), .scale(1.5)], selection.description)
                 } else {
                     let hasShownOnboarding = Onboarding.hasShown
                     Button {

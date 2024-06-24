@@ -50,6 +50,7 @@ public struct StretchyHeaderScrollView<Content: View, Header: View>: View {
     
     public var body: some View {
         GeometryReader{ geo in
+            let scrollViewHeight = geo.size.height
             ScrollViewWithOffsetTracker(axis, showsIndicators: showsIndicators, namespace: namespace) {
                 if onLoadMore == nil {
                     content()
@@ -70,7 +71,6 @@ public struct StretchyHeaderScrollView<Content: View, Header: View>: View {
                         scrollViewOffset = offsetY
                         if onLoadMore != nil, let scrollViewContentSize {
                             if !isLoadingMore {
-                                let scrollViewHeight = geo.size.height
                                 let maxOffset = scrollViewContentSize.height - scrollViewHeight
                                 let trigger = maxOffset - offsetY
                                 if trigger < 150 {

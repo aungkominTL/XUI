@@ -34,10 +34,10 @@ public struct PagerScrollView<PageItems, ID, Content>: View where PageItems: Ran
     
     public var body: some View {
         GeometryReader { geometry in
+            let viewWidth = Int(geometry.size.width)
             ScrollViewReader { scroll in
                 ScrollViewWithOffsetTracker(.horizontal, showsIndicators: false, namespace: Self.typeName) { offset in
                     let count = model.ranges.count
-                    let viewWidth = Int(geometry.size.width)
                     let totalWidth = viewWidth * count
                     let offsetX = Int(-offset.x) + (viewWidth/2)
                     let value = offsetX * count/totalWidth
