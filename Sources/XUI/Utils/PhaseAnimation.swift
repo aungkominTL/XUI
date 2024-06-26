@@ -27,8 +27,6 @@ private struct PhaseAnimationModifier: ViewModifier {
                             return .easeInOut(duration: 0.8)
                         case .scale(let scale):
                             return .easeInOut(duration: 1/scale)
-                        case .transition(_, _):
-                            return .linear(duration: 1)
                         }
                     })
             } else {
@@ -44,8 +42,6 @@ private struct PhaseAnimationModifier: ViewModifier {
                             return .linear(duration: 0.8)
                         case .scale(let scale):
                             return .linear(duration: 0.5/scale)
-                        case .transition(_, _):
-                            return .linear(duration: 1)
                         }
                     })
             }
@@ -65,7 +61,6 @@ public enum CardinalPoint: Double, CaseIterable {
 public enum PhaseAnimationType: Hashable {
     case scale(CGFloat)
     case rotate(CardinalPoint)
-    case transition(x: Double, y: Double)
     
     var scale: CGFloat {
         switch self {
@@ -85,8 +80,6 @@ public enum PhaseAnimationType: Hashable {
     }
     var size: (x: Double, y: Double) {
         switch self {
-        case .transition(let value):
-            return value
         default:
             return (0, 0)
         }

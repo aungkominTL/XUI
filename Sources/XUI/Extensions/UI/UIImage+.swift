@@ -10,7 +10,7 @@ import SwiftUI
 public extension UIImage {
     
     func resize(_ max_size: CGFloat) -> UIImage {
-        let max_size_pixels = max_size / UIScreen.main.scale
+        let max_size_pixels = max_size
         let aspectRatio =  size.width/size.height
         var width: CGFloat
         var height: CGFloat
@@ -30,10 +30,10 @@ public extension UIImage {
         return newImage
     }
     
-    func temporaryLocalFileUrl(id: String, quality: CGFloat) throws -> URL? {
+    func temporaryLocalFileUrl(id: String, quality: CGFloat) async throws -> URL? {
         guard let imageData = jpegData(compressionQuality: quality) else { return nil }
-        let localPath = FileUtil.temp(id: id, ext: "jpeg")
-        imageData.write(path: localPath)
-        return URL(fileURLWithPath: localPath)
+        guard let localPath = FileUtil.documentDirectory?.appending(path: id) else { return nil }
+        imageData.write(path: localPath.path())
+        return localPath
     }
 }

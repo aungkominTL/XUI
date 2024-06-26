@@ -44,19 +44,21 @@ public final class ImagePickerCoordinator: NSObject, UIImagePickerControllerDele
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        if let uiImage = info[.originalImage] as? UIImage {
-            do {
-                let imageURL = try uiImage.resize(600).temporaryLocalFileUrl(id: UUID().uuidString, quality: 0.5)
-                if let imageURL {
-                    let attachment = XAttachment(url: imageURL.absoluteString, type: .photo)
-                    parent.onPicked(attachment)
+        Task {
+            if let uiImage = info[.originalImage] as? UIImage {
+                do {
+                    let imageURL = try await uiImage.resize(600).temporaryLocalFileUrl(id: UUID().uuidString, quality: 0.5)
+                    if let imageURL {
+                        let attachment = XAttachment(url: imageURL.absoluteString, type: .photo)
+                        parent.onPicked(attachment)
+                    }
+                } catch {
+                    Log(error)
                 }
-            } catch {
-                Log(error)
+            } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                let attachment = XAttachment(url: videoURL.absoluteString, type: .video)
+                parent.onPicked(attachment)
             }
-        } else if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            let attachment = XAttachment(url: videoURL.absoluteString, type: .video)
-            parent.onPicked(attachment)
         }
         parent.dismiss()
     }

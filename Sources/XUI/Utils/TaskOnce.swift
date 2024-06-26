@@ -8,10 +8,10 @@
 import SwiftUI
 
 private struct TaskOnceModifier<T: Equatable & Sendable>: ViewModifier {
-    
+    typealias Values = (T, T)
     private let id: T
     private let priority: TaskPriority
-    private let action: @Sendable ((T, T)) async -> Void
+    private let action: @Sendable (Values) async -> Void
     
     @State private var task: Task<Void, Never>?
     @State private var isFirstTime = true
@@ -19,7 +19,7 @@ private struct TaskOnceModifier<T: Equatable & Sendable>: ViewModifier {
     init(
         id: T,
         priority: TaskPriority = .userInitiated,
-        action: @escaping @Sendable ((T, T)) async -> Void
+        action: @escaping @Sendable (Values) async -> Void
     ) {
         self.id = id
         self.priority = priority
@@ -39,14 +39,15 @@ private struct TaskOnceModifier<T: Equatable & Sendable>: ViewModifier {
                 self.task?.cancel()
                 self.task = nil
             }
-            .onChange(of: self.id, debounceTime: .seconds(0.0)) { oldValue, newValue in
+            .onChange(of: self.id, debounceTime: 0.1) { values in
                 self.task?.cancel()
                 self.task = Task(priority: priority) {
-                    await action((oldValue, newValue))
+                    await action(values)
                 }
             }
     }
 }
+
 public extension View {
     func taskOnce<T: Equatable & Sendable>(id: T, priority: TaskPriority = .high, _ action: @escaping @Sendable ((T, T)) async -> Void) -> some View {
         ModifiedContent(content: self, modifier: TaskOnceModifier(id: id, priority: priority, action: action))

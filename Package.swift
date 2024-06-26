@@ -11,14 +11,12 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "4.1.1"),
-        .package(url: "https://github.com/siteline/SwiftUI-Introspect.git", from: "0.9.0")
     ],
     targets: [
         .target(
             name: "XUI",
             dependencies: [
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
-                .product(name: "SwiftUIIntrospect", package: "swiftui-introspect"),
             ]
         ),
         .testTarget(

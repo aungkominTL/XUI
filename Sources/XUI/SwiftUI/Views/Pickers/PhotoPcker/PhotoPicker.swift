@@ -69,11 +69,11 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
                     continue
                 }
                 let itemProvider = result.itemProvider
-                let item = try await itemProvider.loadPhoto()
+                let item = try await loadPhoto(item: itemProvider)
                 switch item {
                 case let uiImage as UIImage:
                     do {
-                        guard let imageURL = try uiImage.temporaryLocalFileUrl(id: id, quality: 1) else {
+                        guard let imageURL = try await uiImage.temporaryLocalFileUrl(id: id, quality: 1) else {
                             return
                         }
                         let attachment = XAttachment(url: imageURL.absoluteString, type: .photo, identifier: id)
@@ -89,7 +89,17 @@ public struct _PhotoPicker: UIViewControllerRepresentable {
                 }
             }
         }
-        
+
+        func loadPhoto(item: NSItemProvider) async throws -> NSItemProviderReading {
+            if item.canLoadObject(ofClass: UIImage.self) {
+                return try await item.loadObject(ofClass: UIImage.self)
+            } else if item.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                let url = try await item.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier)
+                return url as NSItemProviderReading
+            }
+            
+            fatalError()
+        }
         public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             picker.dismiss(animated: true)
             Task {
