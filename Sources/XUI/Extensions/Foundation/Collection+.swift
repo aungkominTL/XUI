@@ -71,3 +71,16 @@ public extension Array {
         Dictionary(grouping: self, by: { $0[keyPath: keyPath] })
     }
 }
+public extension Sequence {
+    func concurrentForEach(
+        _ operation: @escaping (Element) async -> Void
+    ) async {
+        await withTaskGroup(of: Void.self) { group in
+            for element in self {
+                group.addTask {
+                    await operation(element)
+                }
+            }
+        }
+    }
+}

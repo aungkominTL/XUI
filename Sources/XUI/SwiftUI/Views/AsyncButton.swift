@@ -42,7 +42,7 @@ public struct AsyncButton<Label: View>: View {
     public var body: some View {
         Button {
             debouncedTask?.cancel()
-            debouncedTask = Task {
+            debouncedTask = Task { @MainActor in
                 if Task.isCancelled { return }
                 if actionOptions.contains(.disableButton) {
                     isDisabled = true

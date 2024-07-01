@@ -56,7 +56,7 @@ public enum CardinalPoint: Double, CaseIterable {
     case north_360 = 360
     
     // SF Symbol (↗) is 45 degrees rotated, so we substract it to compensate
-    public var angle: Angle { .degrees(self.rawValue - 45.0) }
+    public var angle: Angle { .degrees(self.rawValue) }
 }
 public enum PhaseAnimationType: Hashable {
     case scale(CGFloat)

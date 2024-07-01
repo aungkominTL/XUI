@@ -8,8 +8,8 @@
 import Foundation
 
 public protocol ViewModel: AnyObject {
-    var alert: _Alert? { get set }
-    var loading: Bool { get set }
+    @MainActor var alert: _Alert? { get set }
+    @MainActor var loading: Bool { get set }
     @MainActor func showAlert(_ alert: _Alert)
     @MainActor func setLoading(_ value: Bool)
     @MainActor func reloadUI()
